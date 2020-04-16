@@ -1,8 +1,8 @@
 {
-  "name": "@ganbarodigital/<<YOUR-PACKAGE-NAME>>",
+  "name": "@ganbarodigital/ts-lib-data-locations",
   "version": "0.0.1",
-  "description": "Converts human-readable UUIDs to bytes",
-  "repository": "github:ganbarodigital/<<YOUR-PACKAGE-NAME>>",
+  "description": "Safe types for filepaths and remote data locations",
+  "repository": "github:ganbarodigital/ts-lib-data-locations",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
@@ -24,8 +24,7 @@
     "LICENSE.md"
   ],
   "license": "BSD-3-Clause",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/node": "^13.1.2",
     "tslint": "^5.20.1",
