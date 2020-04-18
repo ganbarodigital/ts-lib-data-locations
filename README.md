@@ -8,6 +8,7 @@ This TypeScript library provides safe types for filepaths and remote data locati
 - [Quick Start](#quick-start)
 - [Concepts](#concepts)
 - [v1 API](#v1-api)
+  - [DataLocation class](#datalocation-class)
 - [NPM Scripts](#npm-scripts)
   - [npm run clean](#npm-run-clean)
   - [npm run build](#npm-run-build)
@@ -45,8 +46,50 @@ Each `DataLocation` is built from:
 
 The `base` is where we currently are, and the `location` is where we want to go to. When we combine those together, we end up with the full path to our data, no matter where it is.
 
+Why do we have both?
+
+Imagine that the `base` is the JSON schema file we're looking at, and `location` points at one of the definitions in that schema file. If the definition uses `$ref:` to refer us to another definition in the same file, we'll create a second `DataLocation` to point at the other definition. That second `DataLocation` will still have the same `base` (because we're still inside the same schema file), but a different `location` (because we're pointing at a different definition).
+
+That's a long-winded way of saying that it's normally very helpful to keep track of the `base` as we work our way through a spec, schema file, or indeed, even just a set of folders on a filesystem.
+
 ## v1 API
 
+### DataLocation class
+
+```typescript
+/**
+ * value type.
+ *
+ * Represents the location of a piece of data. This can be:
+ *
+ * - a file on a filesystem (a Filepath)
+ * - a URL (a URL)
+ */
+export class DataLocation {
+    /**
+     * our `base` - where we are.
+     *
+     * examples:
+     * - the root directory of a project
+     * - the URL of a JSON schema file
+     *
+     * the `base` is normally copied into new objects created from this
+     * DataLocation
+     *
+     * set `base` to `null` if you don't know (or don't care) where this
+     * DataLocation exists
+     */
+    public readonly base: string|null;
+    public readonly location: string;
+
+    protected constructor(
+        base: DataLocation|string|null,
+        location: DataLocation|string
+    );
+}
+```
+
+`DataLocation` is a _value type_. It's the base class to use for all location-type classes.
 
 ## NPM Scripts
 

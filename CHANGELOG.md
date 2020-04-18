@@ -25,6 +25,8 @@ The following changes have been completed, and will be included in the next tagg
 
 ### New
 
+* Added `DataLocation` base class
+
 ### Fixes
 
 ### Dependencies
