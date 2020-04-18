@@ -28,6 +28,7 @@ The following changes have been completed, and will be included in the next tagg
 * Added `DataLocation` base class
 * Added `PackageErrorTable` and `ERROR_TABLE`
 * Added `NotAFilepathError`
+* Added `PathApi` to model NodeJS's `path` module
 
 ### Fixes
 
