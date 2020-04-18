@@ -9,6 +9,7 @@ This TypeScript library provides safe types for filepaths and remote data locati
 - [Concepts](#concepts)
 - [v1 API](#v1-api)
   - [DataLocation class](#datalocation-class)
+  - [NotAFilepathError](#notafilepatherror)
 - [NPM Scripts](#npm-scripts)
   - [npm run clean](#npm-run-clean)
   - [npm run build](#npm-run-build)
@@ -90,6 +91,28 @@ export class DataLocation {
 ```
 
 `DataLocation` is a _value type_. It's the base class to use for all location-type classes.
+
+### NotAFilepathError
+
+```typescript
+// how to import it into your own code
+import { NotAFilepathError } from "@ganbarodigital/ts-lib-data-locations/lib/v1";
+
+// used for the parameters
+export interface NotAFilepathExtraData {
+    public: {
+        base: string | null;
+        location: string;
+    };
+}
+
+export class NotAFilepathError extends AppError
+{
+    public constructor(params: NotAFilepathExtraData | AppErrorParams);
+}
+```
+
+`NotAFilepathError` is a throwable `Error`. Use it to report a data location that isn't a well-formed file path.
 
 ## NPM Scripts
 

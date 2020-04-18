@@ -26,6 +26,8 @@ The following changes have been completed, and will be included in the next tagg
 ### New
 
 * Added `DataLocation` base class
+* Added `PackageErrorTable` and `ERROR_TABLE`
+* Added `NotAFilepathError`
 
 ### Fixes
 
