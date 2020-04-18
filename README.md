@@ -9,6 +9,7 @@ This TypeScript library provides safe types for filepaths and remote data locati
 - [Concepts](#concepts)
 - [v1 API](#v1-api)
   - [DataLocation class](#datalocation-class)
+  - [isFilepath()](#isfilepath)
   - [resolveFilepath()](#resolvefilepath)
   - [NotAFilepathError](#notafilepatherror)
 - [NPM Scripts](#npm-scripts)
@@ -92,6 +93,30 @@ export class DataLocation {
 ```
 
 `DataLocation` is a _value type_. It's the base class to use for all location-type classes.
+
+### isFilepath()
+
+```typescript
+// how to import into your own code
+import { isFilepath } from "@ganbarodigital/ts-lib-data-locations/lib/v1";
+
+/**
+ * data guard.
+ *
+ * do `base` and `location` combine to (possibly) be a location on a
+ * filesystem?
+ *
+ * we don't check whether the path exists, or even that it's a valid path
+ * for the filesystem it would map onto ... merely that it *could* be a
+ * credible path
+ *
+ * @param base
+ *        the base folder / file to start from
+ * @param location
+ *        the (possibly absolute) path to add to `base`
+ */
+export function isFilepath(base: string|null, location: string, api: PathApi = path): boolean;
+```
 
 ### resolveFilepath()
 
