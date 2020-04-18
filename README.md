@@ -10,6 +10,7 @@ This TypeScript library provides safe types for filepaths and remote data locati
 - [v1 API](#v1-api)
   - [DataLocation class](#datalocation-class)
   - [isFilepath()](#isfilepath)
+  - [mustBeFilepath()](#mustbefilepath)
   - [resolveFilepath()](#resolvefilepath)
   - [NotAFilepathError](#notafilepatherror)
 - [NPM Scripts](#npm-scripts)
@@ -117,6 +118,40 @@ import { isFilepath } from "@ganbarodigital/ts-lib-data-locations/lib/v1";
  */
 export function isFilepath(base: string|null, location: string, api: PathApi = path): boolean;
 ```
+
+`isFilepath()` is a _data guard_. Use it to see if a proposed path is (possibly) a filesystem path or not.
+
+Mostly, we check to see if you've passed in a URL instead. Those, we reject.
+
+### mustBeFilepath()
+
+```typescript
+// how to import into your own code
+import { isFilepath } from "@ganbarodigital/ts-lib-data-locations/lib/v1";
+
+// how to import the types used for parameters
+import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+
+/**
+ * data guarantee. throws an error if the given `base` & `location` do not
+ * appear to be a filesystem path
+ *
+ * @param base
+ *        the base file/folder to use
+ * @param location
+ *        the possible path to investigate
+ * @param onError
+ *        your error handler
+ */
+export function mustBeFilepath(
+    base: string|null,
+    location: string,
+    onError: OnError = THROW_THE_ERROR,
+    api: PathApi = path,
+): void;
+```
+
+`mustBeFilepath()` is a _data guarantee_. Use it to enforce the `isFilepath()` constraint in your code.
 
 ### resolveFilepath()
 
