@@ -12,7 +12,8 @@ This TypeScript library provides safe types for filepaths and remote data locati
   - [isFilepath()](#isfilepath)
   - [mustBeFilepath()](#mustbefilepath)
   - [resolveFilepath()](#resolvefilepath)
-  - [NotAFilepathError](#notafilepatherror)
+  - [Filepath Class](#filepath-class)
+  - [NotAFilepathError Class](#notafilepatherror-class)
 - [NPM Scripts](#npm-scripts)
   - [npm run clean](#npm-run-clean)
   - [npm run build](#npm-run-build)
@@ -174,7 +175,167 @@ export function resolveFilepath(base: string|null, location: string, api: PathAp
 
 It does *not* check that the path is valid, or that it exists at all.
 
-### NotAFilepathError
+### Filepath Class
+
+```typescript
+// how to import into your own code
+import { Filepath } from "@ganbarodigital/ts-lib-data-locations/lib/v1";
+
+// how to import types used as parameters
+import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+
+/**
+ * value type.
+ *
+ * Represents a path to a file, folder or other entry in a filesystem.
+ * The thing it points at does not have to exist, and isn't guaranteed
+ * to be legal for the filesystem in question.
+ */
+export class Filepath extends DataLocation implements Value<string> {
+    #pathApi: PathApi;
+    #path: string;
+    #parts: path.ParsedPath | undefined;
+
+    public static format(
+        base: Filepath|string|null,
+        parts: path.ParsedPath,
+        onError: OnError = THROW_THE_ERROR,
+        pathApi: PathApi = path
+    ): Filepath;
+
+    public static fromBase(
+        base: Filepath|string,
+        onError: OnError = THROW_THE_ERROR,
+        pathApi: PathApi = path,
+    ): Filepath;
+
+    public static fromLocation(
+        location: Filepath|string,
+        onError: OnError = THROW_THE_ERROR,
+        pathApi: PathApi = path,
+    ): Filepath;
+
+    public static from(
+        base: Filepath|string|null,
+        offset: Filepath|string,
+        onError: OnError = THROW_THE_ERROR,
+        pathApi: PathApi = path
+    ): Filepath;
+
+    protected constructor(
+        base: Filepath|string|null,
+        location: Filepath|string,
+        onError: OnError = THROW_THE_ERROR,
+        pathApi: PathApi = path,
+    );
+
+    get pathApi(): PathApi {
+        return this.#pathApi;
+    }
+
+    // =======================================================================
+    //
+    // VALUE functions
+    //
+    // -----------------------------------------------------------------------
+
+    /**
+     * type guard. Proves to the TS compiler what we are.
+     */
+    public isValue(): this is Value<string>;
+
+    /**
+     * returns the resolved path
+     */
+    public valueOf(): string;
+
+    /**
+     * auto-conversion support
+     */
+    public [Symbol.toPrimitive](hint: string): string|null;
+
+    // =======================================================================
+    //
+    // PATH API functions
+    //
+    // -----------------------------------------------------------------------
+
+    /**
+     * get the final part of the path
+     *
+     * if `ext` is supplied, we strip that off for you
+     */
+    public basename(ext?: string): string;
+
+    /**
+     * get the parent of this path
+     *
+     * the returned Filepath will have the same `base` path that
+     * this Filepath does
+     */
+    public dirname(onError: OnError = THROW_THE_ERROR): Filepath;
+
+    /**
+     * get the file extension (if there is one)
+     */
+    public extname(): string;
+
+    /**
+     * returns `true` if this Filepath contains an absolute path
+     * (ie a path that starts from the root folder)
+     */
+    public isAbsolute(): boolean;
+
+    /**
+     * appends the given paths to this path
+     *
+     * the returned Filepath will have the same `base` path that
+     * this Filepath does
+     */
+    public join(...paths: string[]): Filepath;
+
+    /**
+     * breaks down the structure of this path
+     */
+    public parse(): path.ParsedPath;
+
+    /**
+     * calculate the relative path between two Filepaths
+     */
+    public relative(to: Filepath): string;
+
+    /**
+     * calculate a new Filepath, by combining this Filepath with the
+     * given `paths`
+     *
+     * the returned Filepath will have this Filepath as its base;
+     * ie it will get a new base path.
+     */
+    public resolve(...paths: string[]): Filepath;
+
+    /**
+     * converts this path into a Microsoft namespaced path, if you're
+     * running on Win32.
+     *
+     * On Linux, it's a no-op, and it just returns the current Filepath
+     * as a string (exactly like .valueOf() does).
+     */
+    public toNamespacedPath(): string;
+}
+```
+
+`Filepath` is a _value type_. It represents a path to something on a filesystem, with an optional "base" location.
+
+It provides a number of static constructors:
+
+* `Filepath.format()` - when you want to create a `Filepath` from a previously-parsed file path.
+* `Filepath.fromBase()` - when you're creating a `Filepath` to represent the "base" location that you want to track.
+* `Filepath.fromLocation()` - when you don't care about tracking the "base" location.
+* `Filepath.from()` - the most generic constructor.
+
+For convenience, it provides methods that give you all of the standard functionality from NodeJS's `path` module. Many of these menthods create new `Filepath` objects, to help you stay safely typed.
+
+### NotAFilepathError Class
 
 ```typescript
 // how to import it into your own code

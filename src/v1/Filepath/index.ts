@@ -36,3 +36,4 @@ export * from "./PathApi";
 export * from "./isFilepath";
 export * from "./mustBeFilepath";
 export * from "./resolveFilepath";
+export * from "./Filepath";

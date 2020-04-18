@@ -32,6 +32,7 @@ The following changes have been completed, and will be included in the next tagg
 * Added `isFilepath()` data guard
 * Added `mustBeFilepath()` data guarantee
 * Added `resolveFilepath()` data transform
+* Added `Filepath` value type
 
 ### Fixes
 
