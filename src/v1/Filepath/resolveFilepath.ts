@@ -31,6 +31,22 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import path from "path";
 
-export * from "./PathApi";
-export * from "./resolveFilepath";
+import { PathApi } from "./PathApi";
+
+/**
+ * combine a (possibly empty) base path with the given location
+ *
+ * @param base
+ *        the base folder / file to start from
+ * @param location
+ *        the (possibly absolute) path to add to `base`
+ */
+export function resolveFilepath(base: string|null, location: string, api: PathApi = path): string {
+    if (base === null) {
+        return location;
+    }
+
+    return api.resolve(base, location);
+}

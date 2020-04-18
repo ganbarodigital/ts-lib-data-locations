@@ -9,6 +9,7 @@ This TypeScript library provides safe types for filepaths and remote data locati
 - [Concepts](#concepts)
 - [v1 API](#v1-api)
   - [DataLocation class](#datalocation-class)
+  - [resolveFilepath()](#resolvefilepath)
   - [NotAFilepathError](#notafilepatherror)
 - [NPM Scripts](#npm-scripts)
   - [npm run clean](#npm-run-clean)
@@ -91,6 +92,27 @@ export class DataLocation {
 ```
 
 `DataLocation` is a _value type_. It's the base class to use for all location-type classes.
+
+### resolveFilepath()
+
+```typescript
+// how to import into your own code
+import { resolveFilepath } from "@ganbarodigital/ts-lib-data-locations/lib/v1";
+
+/**
+ * combine a (possibly empty) base path with the given location
+ *
+ * @param base
+ *        the base folder / file to start from
+ * @param location
+ *        the (possibly absolute) path to add to `base`
+ */
+export function resolveFilepath(base: string|null, location: string, api: PathApi = path): string
+```
+
+`resolveFilepath` is a _data transform_. It combines a (possibly empty) base path with the given location path, by calling `path.resolve()`.
+
+It does *not* check that the path is valid, or that it exists at all.
 
 ### NotAFilepathError
 
