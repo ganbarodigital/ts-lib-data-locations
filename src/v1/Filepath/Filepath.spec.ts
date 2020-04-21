@@ -31,7 +31,11 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
-import { THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+import {
+    AnyAppError,
+    OnError,
+    THROW_THE_ERROR,
+} from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
 import { expect } from "chai";
 import { describe } from "mocha";
 import path from "path";
@@ -40,6 +44,13 @@ import { Filepath } from ".";
 import { DataLocation } from "../DataLocation";
 import { NotAFilepathError } from "../Errors";
 import { DummyPathApi } from "./testFixtures";
+
+class UnitTestClass extends Filepath
+{
+    public constructor(base: string|null, location: string) {
+        super(base, location);
+    }
+}
 
 describe("Filepath", () => {
     describe("parent", () => {
@@ -124,6 +135,212 @@ describe("Filepath", () => {
         });
     });
 
+    describe(".from()", () => {
+        it("accepts a `null` base", () => {
+            expect(() => Filepath.from(null, ".")).to.not.throw();
+        });
+
+        it("auto-resolves `base` and `location`", () => {
+            const inputBase = ".";
+            const inputLocation = "..";
+            const expectedValue = path.dirname(process.cwd());
+
+            const unit = Filepath.from(inputBase, inputLocation);
+            const actualValue = unit.valueOf();
+
+            expect(actualValue).to.equal(expectedValue);
+        });
+
+        it("accepts an alternative error handler", () => {
+            const onError: OnError = (err: AnyAppError) => {
+                throw new Error("test error handler called!!");
+            }
+
+            expect(() => Filepath.from("https://not-a-path", "", onError)).to.throw("test error handler called!!");
+        });
+
+        it("has a default path API of the NodeJS path module", () => {
+            const unit = Filepath.from(null, ".");
+            expect(unit.pathApi).to.eql(path);
+        })
+
+        it ("rejects a URL in the `base` parameter", () => {
+            expect(() => Filepath.from("http://example.com", ".")).to.throw(NotAFilepathError);
+        })
+
+        it ("rejects a URL in the `location` parameter", () => {
+            expect(() => Filepath.from(null, "http://example.com")).to.throw(NotAFilepathError);
+        })
+
+        it("uses the provided pathApi", () => {
+            const inputBase = ".";
+            const inputLocation = "example.ts";
+            const dummyApi = new DummyPathApi();
+            dummyApi.resolveResponses = [inputLocation];
+            dummyApi.normalizeResponses = [inputLocation];
+
+            const expectedCallList = [
+                "resolve()",
+                "normalize()",
+            ];
+            const expectParamList = [
+                // from the call to resolve()
+                [ ".", "example.ts" ],
+
+                // from the call to normalize()
+                "example.ts",
+            ];
+
+            const unit = Filepath.from(inputBase, inputLocation, THROW_THE_ERROR, dummyApi);
+            expect(unit).to.be.instanceOf(Filepath);
+
+            const actualCallList = dummyApi.calledList;
+            const actualParamList = dummyApi.paramList;
+
+            expect(actualCallList).to.eql(expectedCallList);
+            expect(actualParamList).to.eql(expectParamList);
+        });
+    });
+
+    describe(".fromBase()", () => {
+        it("uses the given path as the `base` for the Filepath", () => {
+            const inputBase = "/tmp/example";
+            const expectedValue = inputBase;
+
+            const unit = Filepath.fromBase(inputBase);
+            const actualValue = unit.base;
+
+            expect(actualValue).to.equal(expectedValue);
+        });
+
+        it("uses the given path as the value for the Filepath", () => {
+            const inputBase = "/tmp/example";
+            const expectedValue = inputBase;
+
+            const unit = Filepath.fromBase(inputBase);
+            const actualValue = unit.valueOf();
+
+            expect(actualValue).to.equal(expectedValue);
+        });
+
+        it("accepts an alternative error handler", () => {
+            const onError: OnError = (err: AnyAppError) => {
+                throw new Error("test error handler called!!");
+            }
+
+            expect(() => Filepath.fromBase("https://not-a-path", onError)).to.throw("test error handler called!!");
+        });
+
+        it("has a default path API of the NodeJS path module", () => {
+            const unit = Filepath.fromBase(".");
+            expect(unit.pathApi).to.eql(path);
+        });
+
+        it ("rejects a URL in the `base` parameter", () => {
+            expect(() => Filepath.fromBase("http://example.com")).to.throw(NotAFilepathError);
+        });
+
+        it("uses the provided pathApi", () => {
+            const inputBase = "/tmp/example/file";
+            const dummyApi = new DummyPathApi();
+            dummyApi.resolveResponses = [inputBase];
+            dummyApi.normalizeResponses = [inputBase];
+
+            const expectedCallList = [
+                "resolve()",
+                "normalize()",
+            ];
+            const expectParamList = [
+                // from the call to resolve()
+                [ "/tmp/example/file", "" ],
+
+                // from the call to normalize()
+                "/tmp/example/file",
+            ];
+
+            const unit = Filepath.fromBase(inputBase, THROW_THE_ERROR, dummyApi);
+            expect(unit).to.be.instanceOf(Filepath);
+
+            const actualCallList = dummyApi.calledList;
+            const actualParamList = dummyApi.paramList;
+
+            expect(actualCallList).to.eql(expectedCallList);
+            expect(actualParamList).to.eql(expectParamList);
+        });
+    });
+
+    describe(".fromLocation()", () => {
+        it("uses the given path as the `location` for the Filepath", () => {
+            const inputLocation = "/tmp/example";
+            const expectedValue = inputLocation;
+
+            const unit = Filepath.fromLocation(inputLocation);
+            const actualValue = unit.location;
+
+            expect(actualValue).to.equal(expectedValue);
+        });
+
+        it("sets the `base` of the Filepath to be `null`", () => {
+            const inputLocation = "/tmp/example";
+            const expectedValue = null;
+
+            const unit = Filepath.fromLocation(inputLocation);
+            const actualValue = unit.base;
+
+            expect(actualValue).to.equal(expectedValue);
+        });
+
+        it("uses the given path as the value for the Filepath", () => {
+            const inputLocation = "/tmp/example";
+            const expectedValue = inputLocation;
+
+            const unit = Filepath.fromLocation(inputLocation);
+            const actualValue = unit.valueOf();
+
+            expect(actualValue).to.equal(expectedValue);
+        });
+
+        it("accepts an alternative error handler", () => {
+            const onError: OnError = (err: AnyAppError) => {
+                throw new Error("test error handler called!!");
+            }
+
+            expect(() => Filepath.fromLocation("https://not-a-path", onError)).to.throw("test error handler called!!");
+        });
+
+        it("has a default path API of the NodeJS path module", () => {
+            const unit = Filepath.fromLocation(".");
+            expect(unit.pathApi).to.eql(path);
+        });
+
+        it ("rejects a URL in the `location` parameter", () => {
+            expect(() => Filepath.fromLocation("http://example.com")).to.throw(NotAFilepathError);
+        });
+
+        it("uses the provided pathApi", () => {
+            const inputLocation = "/tmp/example/file";
+            const dummyApi = new DummyPathApi();
+            dummyApi.normalizeResponses = [inputLocation];
+
+            const expectedCallList = [
+                "normalize()",
+            ];
+            const expectParamList = [
+                // from the call to normalize()
+                "/tmp/example/file",
+            ];
+
+            const unit = Filepath.fromLocation(inputLocation, THROW_THE_ERROR, dummyApi);
+            expect(unit).to.be.instanceOf(Filepath);
+
+            const actualCallList = dummyApi.calledList;
+            const actualParamList = dummyApi.paramList;
+
+            expect(actualCallList).to.eql(expectedCallList);
+            expect(actualParamList).to.eql(expectParamList);
+        });
+    });
+
     describe(".constructor()", () => {
         it("accepts a `null` base", () => {
             expect(() => Filepath.from(null, ".")).to.not.throw();
@@ -141,17 +358,25 @@ describe("Filepath", () => {
         });
 
         it("has a default path API of the NodeJS path module", () => {
-            const unit = Filepath.from(null, ".");
+            const unit = new UnitTestClass(null, ".");
             expect(unit.pathApi).to.eql(path);
         })
 
         it ("rejects a URL in the `base` parameter", () => {
-            expect(() => Filepath.from("http://example.com", ".")).to.throw(NotAFilepathError);
-        })
+            expect(() => new UnitTestClass("http://example.com", ".")).to.throw(NotAFilepathError);
+        });
 
         it ("rejects a URL in the `location` parameter", () => {
-            expect(() => Filepath.from(null, "http://example.com")).to.throw(NotAFilepathError);
-        })
+            expect(() => new UnitTestClass(null, "http://example.com")).to.throw(NotAFilepathError);
+        });
+
+        it("accepts an alternative error handler", () => {
+            const onError: OnError = (err: AnyAppError) => {
+                throw new Error("test error handler called!!");
+            }
+
+            expect(() => Filepath.from(null, "https://not-a-path", onError)).to.throw("test error handler called!!");
+        });
 
         it("uses the provided pathApi", () => {
             const inputBase = ".";
