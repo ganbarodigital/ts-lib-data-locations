@@ -71,7 +71,7 @@ export class Filepath extends DataLocation implements Value<string> {
         onError: OnError = THROW_THE_ERROR,
         pathApi: PathApi = path,
     ): Filepath {
-        return new Filepath(null, base, onError, pathApi);
+        return new Filepath(base, "", onError, pathApi);
     }
 
     public static fromLocation(
