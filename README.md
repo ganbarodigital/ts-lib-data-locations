@@ -14,11 +14,18 @@ This TypeScript library provides safe types for filepaths and remote data locati
   - [resolveFilepath()](#resolvefilepath)
   - [Filepath Class](#filepath-class)
   - [NotAFilepathError Class](#notafilepatherror-class)
+  - [URLFormatOptions](#urlformatoptions)
+  - [URLFormatOptionsWithHostname](#urlformatoptionswithhostname)
+  - [PRURLFormatOptions](#prurlformatoptions)
+  - [URLFormatOptionsWithPathname](#urlformatoptionswithpathname)
+  - [URLFormatOptionsWithSearch](#urlformatoptionswithsearch)
+  - [URLFormatOptionsWithHash](#urlformatoptionswithhash)
 - [NPM Scripts](#npm-scripts)
   - [npm run clean](#npm-run-clean)
   - [npm run build](#npm-run-build)
   - [npm run test](#npm-run-test)
   - [npm run cover](#npm-run-cover)
+  - [References](#references)
 
 ## Quick Start
 
@@ -357,6 +364,229 @@ export class NotAFilepathError extends AppError
 
 `NotAFilepathError` is a throwable `Error`. Use it to report a data location that isn't a well-formed file path.
 
+### URLFormatOptions
+
+```typescript
+/**
+ * the parts of a URL, using terms from the WHATWG specification
+ */
+export type URLFormatOptions =
+    URLFormatOptionsWithHostname
+    | PRURLFormatOptions
+    | URLFormatOptionsWithPathname
+    | URLFormatOptionsWithSearch
+    | URLFormatOptionsWithHash;
+```
+
+`URLFormatOptions` is an intersection type. It represents the individual parts of a URL that you want to build.
+
+```typescript
+// how to import it
+import { buildURLHref, URLFormatOptions } from "@ganbarodigital/ts-lib-data-locations/lib/v1";
+
+// ALWAYS use the type 'URLFormatOptions' when building your list of
+// URL parts, for maximum future compatibility
+const parts: URLFormatOptions = {
+    hostname: "www.example.com",
+};
+
+const href = buildURLHref(parts);
+```
+
+`URLFormatOptions` is made from _dumb value types_. Each of these types represents a single, valid state. If we've built this right, it should be impossible for you to create a list of URL parts where the list doesn't contain the parts needed to assemble a URL.
+
+There's no verification, so there's nothing to stop you making a list that contains invalid values for different parts. That's a different problem :)
+
+#### No Authentication Support
+
+Although the WHATWG specification (which browsers and NodeJS use) includes support for passing usernames and passwords in URLs, we've decided **not** to support those fields.
+
+These fields are deprecated by [RFC 3986][RFC 3986], and many browsers have dropped support for these fields.
+
+### URLFormatOptionsWithHostname
+
+```typescript
+/**
+ * the parts of a URL, using terms from the WHATWG specification.
+ *
+ * this interface is built for URLs that definitely contain a hostname
+ */
+export interface URLFormatOptionsWithHostname {
+    /**
+     * the network protocol to use (eg 'http' or 'https')
+     */
+    protocol?: string;
+
+    /**
+     * the server where the remote data is hosted
+     */
+    hostname: string;
+
+    /**
+     * the port number to connect to on the remote hostname
+     */
+    port?: IpPort;
+
+    /**
+     * the query path portion of the URL
+     */
+    pathname?: string;
+
+    /**
+     * the #fragment section of the URL
+     */
+    hash?: string;
+
+    /**
+     * the query string portion of the URL
+     */
+    search?: string;
+}
+```
+
+`URLFormatOptionsWithHostname` is a _dumb value type_. It represents
+
+### PRURLFormatOptions
+
+```typescript
+/**
+ * the parts of a URL, using terms from the WHATWG specification
+ *
+ * this interface is built for URLs that take advantage of a feature called
+ * 'protocol-relative'.
+ */
+export interface PRURLFormatOptions {
+    /**
+     * set to `true` if you want a protocol-relative URL to be generated
+     *
+     * set to `false` if you don't want a protocol specified at the front
+     * of this URL
+     */
+    protocolRelative: boolean;
+
+    /**
+     * the server where the remote data is hosted
+     */
+    hostname: string;
+
+    /**
+     * the port number to connect to on the remote hostname
+     */
+    port?: string|number;
+
+    /**
+     * the query path portion of the URL
+     */
+    pathname?: string;
+
+    /**
+     * the query string portion of the URL
+     */
+    search?: string;
+
+    /**
+     * the #fragment section of the URL
+     */
+    hash?: string;
+}
+```
+
+### URLFormatOptionsWithPathname
+
+```typescript
+/**
+ * the parts of a URL, using terms from the WHATWG specification
+ *
+ * this interface is built for relative URLs that contain a query path
+ * of some kind
+ */
+export interface URLFormatOptionsWithPathname {
+    /**
+     * the network protocol to use (eg 'http' or 'https')
+     */
+    protocol?: string;
+
+    /**
+     * the query path portion of the URL
+     */
+    pathname: string;
+
+    /**
+     * the query string portion of the URL
+     */
+    search?: string;
+
+    /**
+     * the #fragment section of the URL
+     */
+    hash?: string;
+}
+```
+
+### URLFormatOptionsWithSearch
+
+```typescript
+/**
+ * the parts of a URL, using terms from the WHATWG specification
+ *
+ * this interface is built for relative URLs that contain a query string
+ * of some kind
+ */
+export interface URLFormatOptionsWithSearch {
+    /**
+     * the network protocol to use (eg 'http' or 'https')
+     */
+    protocol?: string;
+
+    /**
+     * the query path portion of the URL
+     */
+    pathname?: string;
+
+    /**
+     * the query string portion of the URL
+     */
+    search: string;
+
+    /**
+     * the #fragment section of the URL
+     */
+    hash: string;
+}
+```
+
+### URLFormatOptionsWithHash
+
+```typescript
+/**
+ * the parts of a URL, using terms from the WHATWG specification
+ *
+ * this interface is built for URLs that contain a 'fragment' of some kind,
+ * called the 'hash' in the WHATWG specification
+ */
+export interface URLFormatOptionsWithHash {
+    /**
+     * the network protocol to use (eg 'http' or 'https')
+     */
+    protocol?: string;
+
+    /**
+     * the query path portion of the URL
+     */
+    pathname?: string;
+
+    /**
+     * the query string portion of the URL
+     */
+    search?: string;
+
+    /**
+     * the #fragment section of the URL
+     */
+    hash: string;
+}
+```
+
 ## NPM Scripts
 
 ### npm run clean
@@ -378,3 +608,7 @@ Use `npm run test` to compile and run the unit tests. The compiled code is place
 Use `npm run cover` to compile the unit tests, run them, and see code coverage metrics.
 
 Metrics are written to the terminal, and are also published as HTML into the `coverage/` folder.
+
+### References
+
+[RFC 3986]: https://tools.ietf.org/html/rfc3986
