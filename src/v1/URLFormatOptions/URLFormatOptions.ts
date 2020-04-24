@@ -240,7 +240,7 @@ export interface URLFormatOptionsWithSearch {
     /**
      * the #fragment section of the URL
      */
-    hash: string;
+    hash?: string;
 }
 
 /**
