@@ -34,7 +34,8 @@
 import { expect } from "chai";
 import { describe } from "mocha";
 
-import { buildURLHref, URLFormatOptions } from ".";
+import { buildURLHref } from ".";
+import { URLFormatOptions } from "../URLFormatOptions";
 
 interface UnitTestData {
     description: string;
