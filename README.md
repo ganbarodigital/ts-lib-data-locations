@@ -15,6 +15,10 @@ This TypeScript library provides safe types for filepaths and remote data locati
   - [resolveFilepath()](#resolvefilepath)
   - [Filepath Class](#filepath-class)
   - [NotAFilepathError Class](#notafilepatherror-class)
+- [IpPort](#ipport)
+  - [IpPort Value Type](#ipport-value-type)
+  - [formatIpPortAsNumber()](#formatipportasnumber)
+  - [formatIpPortAsString()](#formatipportasstring)
 - [URLs](#urls)
   - [URLFormatOptions](#urlformatoptions)
   - [URLFormatOptionsWithHostname](#urlformatoptionswithhostname)
@@ -369,6 +373,40 @@ export class NotAFilepathError extends AppError
 ```
 
 `NotAFilepathError` is a throwable `Error`. Use it to report a data location that isn't a well-formed file path.
+
+## IpPort
+
+### IpPort Value Type
+
+```typescript
+/**
+ * value type
+ *
+ * represents the port number of an IP address.
+ */
+export type IpPort = string|number;
+```
+
+### formatIpPortAsNumber()
+
+```typescript
+// how to import
+import { formatIpPortAsNumber, IpPort } from "@ganbarodigital/ts-lib-data-locations/lib/v1";
+
+/**
+ * convert an IpPort interface to be an integer number
+ */
+export function formatIpPortAsNumber(port: IpPort): number;
+```
+
+### formatIpPortAsString()
+
+```typescript
+/**
+ * convert an IpPort interface to be a valid string
+ */
+export function formatIpPortAsString(port: IpPort): string;
+```
 
 ## URLs
 
