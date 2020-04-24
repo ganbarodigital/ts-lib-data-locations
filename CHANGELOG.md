@@ -25,22 +25,26 @@ The following changes have been completed, and will be included in the next tagg
 
 ### New
 
-* Added `DataLocation` base class
-* Added `PackageErrorTable` and `ERROR_TABLE`
-* Added `NotAFilepathError`
-* Added `PathApi` to model NodeJS's `path` module
-* Added `isFilepath()` data guard
-* Added `isPRURLFormatOptions()` type guard
-* Added `isURLFormatOptionsWithHostname()` type guard
-* Added `mustBeFilepath()` data guarantee
-* Added `resolveFilepath()` data transform
-* Added `Filepath` value type
-* Added `URLFormatOptions` dumb value type
-* Added `URLFormatOptionsWithHostname` dumb value type
-* Added `PRURLFormatOptions` dumb value type
-* Added `URLFormatOptionsWithPathname` dumb value type
-* Added `URLFormatOptionsWithSearch` dumb value type
-* Added `URLFormatOptionsWithHash` dumb value type
+* DataLocations
+  - Added `DataLocation` base class
+* Error Handling
+  - Added `PackageErrorTable` and `ERROR_TABLE`
+* Filepaths
+  - Added `NotAFilepathError`
+  - Added `PathApi` to model NodeJS's `path` module
+  - Added `isFilepath()` data guard
+  - Added `mustBeFilepath()` data guarantee
+  - Added `resolveFilepath()` data transform
+  - Added `Filepath` value type
+* URLFormatOptions
+  - Added `isPRURLFormatOptions()` type guard
+  - Added `isURLFormatOptionsWithHostname()` type guard
+  - Added `URLFormatOptions` dumb value type
+  - Added `URLFormatOptionsWithHostname` dumb value type
+  - Added `PRURLFormatOptions` dumb value type
+  - Added `URLFormatOptionsWithPathname` dumb value type
+  - Added `URLFormatOptionsWithSearch` dumb value type
+  - Added `URLFormatOptionsWithHash` dumb value type
 
 ### Fixes
 
