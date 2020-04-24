@@ -7,13 +7,15 @@ This TypeScript library provides safe types for filepaths and remote data locati
 - [Introduction](#introduction)
 - [Quick Start](#quick-start)
 - [Concepts](#concepts)
-- [v1 API](#v1-api)
+- [DataLocation](#datalocation)
   - [DataLocation class](#datalocation-class)
+- [Filepaths](#filepaths)
   - [isFilepath()](#isfilepath)
   - [mustBeFilepath()](#mustbefilepath)
   - [resolveFilepath()](#resolvefilepath)
   - [Filepath Class](#filepath-class)
   - [NotAFilepathError Class](#notafilepatherror-class)
+- [URLs](#urls)
   - [URLFormatOptions](#urlformatoptions)
   - [URLFormatOptionsWithHostname](#urlformatoptionswithhostname)
   - [PRURLFormatOptions](#prurlformatoptions)
@@ -66,7 +68,7 @@ Imagine that the `base` is the JSON schema file we're looking at, and `location`
 
 That's a long-winded way of saying that it's normally very helpful to keep track of the `base` as we work our way through a spec, schema file, or indeed, even just a set of folders on a filesystem.
 
-## v1 API
+## DataLocation
 
 ### DataLocation class
 
@@ -104,6 +106,8 @@ export class DataLocation {
 ```
 
 `DataLocation` is a _value type_. It's the base class to use for all location-type classes.
+
+## Filepaths
 
 ### isFilepath()
 
@@ -365,6 +369,8 @@ export class NotAFilepathError extends AppError
 ```
 
 `NotAFilepathError` is a throwable `Error`. Use it to report a data location that isn't a well-formed file path.
+
+## URLs
 
 ### URLFormatOptions
 
