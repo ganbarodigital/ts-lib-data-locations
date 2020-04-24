@@ -20,6 +20,7 @@ This TypeScript library provides safe types for filepaths and remote data locati
   - [formatIpPortAsNumber()](#formatipportasnumber)
   - [formatIpPortAsString()](#formatipportasstring)
 - [URLs](#urls)
+  - [buildURLHref()](#buildurlhref)
   - [URLFormatOptions](#urlformatoptions)
   - [URLFormatOptionsWithHostname](#urlformatoptionswithhostname)
   - [PRURLFormatOptions](#prurlformatoptions)
@@ -409,6 +410,20 @@ export function formatIpPortAsString(port: IpPort): string;
 ```
 
 ## URLs
+
+### buildURLHref()
+
+```typescript
+// how to import
+import { buildURLHref } from "@ganbarodigital/ts-lib-data-locations/lib/v1";
+
+/**
+ * assembles a URL string from a list of given parts
+ */
+export function buildURLHref(parts: URLFormatOptions): string;
+```
+
+`buildURLHref()` converts a list of URL constituent parts into a single URL string.
 
 ### URLFormatOptions
 

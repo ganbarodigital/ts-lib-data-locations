@@ -49,6 +49,8 @@ The following changes have been completed, and will be included in the next tagg
   - Added `URLFormatOptionsWithPathname` dumb value type
   - Added `URLFormatOptionsWithSearch` dumb value type
   - Added `URLFormatOptionsWithHash` dumb value type
+* URL
+  - Added `buildURLHref()`
 
 ### Fixes
 
