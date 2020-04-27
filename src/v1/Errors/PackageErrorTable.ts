@@ -36,6 +36,7 @@ import { httpStatusCodeFrom } from "@ganbarodigital/ts-lib-http-types/lib/v1";
 import { packageNameFrom } from "@ganbarodigital/ts-lib-packagename/lib/v1";
 
 import { NotAFilepathTemplate } from "./NotAFilepath";
+import { NotAURLTemplate } from "./NotAURL";
 
 const PACKAGE_NAME = packageNameFrom("@ganbarodigital/ts-lib-mediatypes");
 
@@ -48,6 +49,13 @@ export class PackageErrorTable implements ErrorTable {
         packageName: PACKAGE_NAME,
         errorName: "not-a-filepath",
         detail: "the given string does not have the structure of a filepath (probably a URL instead)",
+        status: httpStatusCodeFrom(422),
+    };
+
+    public "not-a-url": NotAURLTemplate = {
+        packageName: PACKAGE_NAME,
+        errorName: "not-a-url",
+        detail: "cannot build a valid URL from the given parts",
         status: httpStatusCodeFrom(422),
     };
 }

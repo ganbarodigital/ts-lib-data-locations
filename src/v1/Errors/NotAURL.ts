@@ -31,6 +31,61 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
-export { buildURLHref } from "./buildURLHref";
-export * from "./isURL";
-export * from "./URL";
+import {
+    AppError,
+    AppErrorParams,
+    ErrorTableTemplate,
+    ExtraPublicData,
+    StructuredProblemReport,
+    StructuredProblemReportDataWithExtraData,
+} from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+
+import { ERROR_TABLE, PackageErrorTable } from "./PackageErrorTable";
+
+export interface NotAURLExtraData extends ExtraPublicData {
+    public: {
+        base: string | null;
+        location: string;
+    };
+}
+
+export type NotAURLTemplate = ErrorTableTemplate<
+    PackageErrorTable,
+    "not-a-url"
+>;
+
+export type NotAURLData = StructuredProblemReportDataWithExtraData<
+    PackageErrorTable,
+    "not-a-url",
+    NotAURLTemplate,
+    NotAURLExtraData
+>;
+
+export type NotAURLSPR = StructuredProblemReport<
+    PackageErrorTable,
+    "not-a-url",
+    NotAURLTemplate,
+    NotAURLExtraData,
+    NotAURLData
+>;
+
+export class NotAURLError extends AppError<
+    PackageErrorTable,
+    "not-a-url",
+    NotAURLTemplate,
+    NotAURLExtraData,
+    NotAURLData,
+    NotAURLSPR
+> {
+    public constructor(params: NotAURLExtraData & AppErrorParams) {
+        const errorData: NotAURLData = {
+            template: ERROR_TABLE["not-a-url"],
+            errorId: params.errorId,
+            extra: {
+                public: params.public,
+            },
+        };
+
+        super(StructuredProblemReport.from(errorData));
+    }
+}

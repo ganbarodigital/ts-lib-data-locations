@@ -51,6 +51,7 @@ The following changes have been completed, and will be included in the next tagg
   - Added `URLFormatOptionsWithHash` dumb value type
 * URL
   - Added `buildURLHref()`
+  - Added `URL` value type
 
 ### Fixes
 

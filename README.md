@@ -20,6 +20,7 @@ This TypeScript library provides safe types for filepaths and remote data locati
   - [formatIpPortAsNumber()](#formatipportasnumber)
   - [formatIpPortAsString()](#formatipportasstring)
 - [URLs](#urls)
+  - [URL Value Type](#url-value-type)
   - [buildURLHref()](#buildurlhref)
   - [URLFormatOptions](#urlformatoptions)
   - [URLFormatOptionsWithHostname](#urlformatoptionswithhostname)
@@ -410,6 +411,181 @@ export function formatIpPortAsString(port: IpPort): string;
 ```
 
 ## URLs
+
+### URL Value Type
+
+```typescript
+// how to import
+import { URL } from "@ganbarodigital/ts-lib-data-locations/lib/v1";
+
+/**
+ * value type. Represents a URL that is built from (up to) two parts:
+ *
+ * - a base URL (such as a page, or the root document of an API / Schema spec)
+ * - a location URL (such as a reference to an ID on that page / spec)
+ *
+ * We also implement (most of) the WHATWG spec for a URL (as done by NodeJS
+ * and modern browsers), to make this class immediately familiar.
+ *
+ * The main things NOT IMPLEMENTED are:
+ *
+ * - any setters (this is an immutable value), and
+ * - support for usernames / passwords in URLs (deprecated by RFC 3986)
+ */
+export class URL extends DataLocation implements Value<string> {
+    /**
+     * static constructor. Assembles a URL from an optional baseUrl,
+     * and a set of parts.
+     */
+    public static format(
+        base: string|null|URL|url.URL,
+        parts: URLFormatOptions,
+        onError: OnError = THROW_THE_ERROR
+    ): URL;
+
+    /**
+     * static constructor. Assembles a URL value from the given base URL.
+     */
+    public static fromBase(
+        base: string|URL|url.URL,
+        onError: OnError = THROW_THE_ERROR
+    );
+
+    /**
+     * static constructor. Assembles a URL value from the given URL.
+     */
+    public static fromLocation(
+        location: string|URL|url.URL,
+        onError: OnError = THROW_THE_ERROR
+    ): URL;
+
+    /**
+     * static constructor. Assembles a URL from an optional baseURL,
+     * and a (possibly relative) URL.
+     */
+    public static from(
+        base: string|null|URL|url.URL,
+        location: string|URL|url.URL,
+        onError: OnError = THROW_THE_ERROR
+    ): URL;
+
+    /**
+     * smart constructor
+     */
+    protected constructor(
+        base: string|null,
+        location: string,
+        onError: OnError = THROW_THE_ERROR
+    );
+
+    // =======================================================================
+    //
+    // VALUE functions
+    //
+    // -----------------------------------------------------------------------
+
+    /**
+     * type guard. Proves to the TS compiler what we are.
+     */
+    public isValue(): this is Value<string>;
+
+    /**
+     * returns the resolved path
+     */
+    public valueOf(): string;
+
+    /**
+     * auto-conversion support
+     */
+    public [Symbol.toPrimitive](hint: string): string|null;
+
+    // =======================================================================
+    //
+    // urlApi FUNCTIONS
+    //
+    // -----------------------------------------------------------------------
+
+    /**
+     * returns the #fragment section of this URL
+     */
+    get hash(): string;
+
+    /**
+     * returns the '<hostname>:<port>' section of this URL
+     */
+    get host(): string;
+
+    /**
+     * returns the hostname section of this URL
+     */
+    get hostname(): string;
+
+    /**
+     * returns the full URL as a string
+     */
+    get href(): string;
+
+    /**
+     * returns the '<protocol>://<hostname>:<port>' section of this URL
+     */
+    get origin(): string;
+
+    /**
+     * returns the query path section of this URL
+     */
+    get pathname(): string;
+
+    /**
+     * returns the port number that this URL specifies
+     *
+     * if the URL doesn't contain a port, OR if the URL uses the default
+     * port for the URL's <protocol>, this returns an empty string
+     */
+    get port(): string;
+
+    /**
+     * returns the protocol specified in this URL
+     */
+    get protocol(): string;
+
+    /**
+     * returns the query string section of this URL.
+     *
+     * The return value starts with a '?'
+     *
+     * If the URL does not have a query string section, we return an empty
+     * string.
+     */
+    get search(): string;
+
+    /**
+     * returns a list of this URL's query string keys and values
+     */
+    get searchParams(): url.URLSearchParams;
+
+    /**
+     * returns the URL as a ready-to-use string
+     */
+    public toString(): string;
+
+    /**
+     * returns the URL as a string to use in JSON serialization.
+     *
+     * NOTE that this (just like the NodeJS URL.toJSON()) does *not*
+     * return a valid JSON string. I've zero idea why the original API
+     * behaves this way.
+     */
+    public toJSON(): string;
+}
+```
+
+`URL` is a _value type_. It represents a URL - an address to a resource on the web.
+
+There's a few notable differences between this and NodeJS's built-in `URL`:
+
+* we use static constructors, instead of `new`
+* we keep track of the `base url` used to build the value object
+* ours is immutable
 
 ### buildURLHref()
 
