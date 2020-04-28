@@ -277,7 +277,7 @@ export class URL extends DataLocation implements Value<string> {
      * - any `search` parameters removed
      * - any `hash` fragment removed
      */
-    public dirname(): URL {
+    public dirname(onError: OnError = THROW_THE_ERROR): URL {
         const parts = this.parse();
         parts.pathname = path.posix.dirname(parts.pathname);
 
@@ -285,7 +285,7 @@ export class URL extends DataLocation implements Value<string> {
         parts.search = undefined;
         parts.hash = undefined;
 
-        return URL.format(this.base, parts);
+        return URL.format(this.base, parts, onError);
     }
 
     public join(...urls: string[]) {

@@ -599,7 +599,7 @@ export class URL extends DataLocation implements Value<string> {
      * - any `search` parameters removed
      * - any `hash` fragment removed
      */
-    public dirname(): URL;
+    public dirname(onError: OnError = THROW_THE_ERROR): URL;
 
     /**
      * breaks down the structure of this URL
