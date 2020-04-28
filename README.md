@@ -419,6 +419,12 @@ export function formatIpPortAsString(port: IpPort): string;
 // how to import
 import { URL } from "@ganbarodigital/ts-lib-data-locations/lib/v1";
 
+// the types we use for parameters
+import { ParsedURL } from "@ganbarodigital/ts-lib-data-locations/lib/v1";
+import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+import { Value } from "@ganbarodigital/ts-lib-value-objects/lib/v2";
+import url from "url";
+
 /**
  * value type. Represents a URL that is built from (up to) two parts:
  *
