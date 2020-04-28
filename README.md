@@ -30,6 +30,7 @@ This TypeScript library provides safe types for filepaths and remote data locati
   - [URLFormatOptionsWithHash](#urlformatoptionswithhash)
   - [isPRURLFormatOptions()](#isprurlformatoptions)
   - [isURLFormatOptionsWithHostname()](#isurlformatoptionswithhostname)
+  - [isURLSearch()](#isurlsearch)
   - [ParsedURL](#parsedurl)
 - [NPM Scripts](#npm-scripts)
   - [npm run clean](#npm-run-clean)
@@ -889,6 +890,22 @@ export function isURLFormatOptionsWithHostname(input: URLFormatOptions): input i
 ```
 
 `isURLFormatOptionsWithHostname()` is a _type guard_. Use it to tell what sub-type of `URLFormatOptions` you have been given.
+
+
+### isURLSearch()
+
+```typescript
+// how to import into your own code
+import { isURLSearch } from "@ganbarodigital/ts-lib-data-locations/lib/v1";
+
+/**
+ * data guard. Is the given input a URL search term?
+ *
+ * the entire input must have the structure of a URL search term,
+ * for it to match
+ */
+export function isURLSearch(input: string): boolean;
+```
 
 ### ParsedURL
 

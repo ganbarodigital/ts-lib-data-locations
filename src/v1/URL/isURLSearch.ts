@@ -31,7 +31,15 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
-export { buildURLHref } from "./buildURLHref";
-export * from "./isURL";
-export * from "./isURLSearch";
-export * from "./URL";
+
+export const URLSearchRegex = new RegExp("^(\\?)*([^=]+)=(.+)+$");
+
+/**
+ * data guard. Is the given input a URL search term?
+ *
+ * the entire input must have the structure of a URL search term,
+ * for it to match
+ */
+export function isURLSearch(input: string): boolean {
+    return URLSearchRegex.test(input);
+}
