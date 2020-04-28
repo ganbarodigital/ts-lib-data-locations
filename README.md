@@ -604,6 +604,26 @@ export class URL extends DataLocation implements Value<string> {
     public dirname(onError: OnError = THROW_THE_ERROR): URL;
 
     /**
+     * builds a new URL by appending the given parts to this URL
+     *
+     * the returned URL will have the same `base` path that
+     * this URL does
+     *
+     * we apply the parts in the order you give them. Change something
+     * earlier in the URL structure, and we drop everything that comes
+     * after it:
+     *
+     * - a new URL completely replaces anything earlier in the params
+     * - a path change forces us to drop `search` and `hash` segments
+     * - a ?search change forces us to drop the `#hash` segment
+     * - a #hash change doesn't change anything else in the response
+     *
+     * the only way to change the protocol or hostname is to pass in a
+     * new URL as a string.
+     */
+    public join(...urlsOrParts: string[]): URL;
+
+    /**
      * breaks down the structure of this URL
      */
     public parse(): ParsedURL;

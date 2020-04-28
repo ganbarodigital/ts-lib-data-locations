@@ -41,6 +41,9 @@ import { NotAURLError } from "../Errors/NotAURL";
 import { ParsedURL } from "../ParsedURL";
 import { URLFormatOptions } from "../URLFormatOptions";
 import { buildURLHref } from "./buildURLHref";
+import { isURL } from "./isURL";
+import { isURLHash } from "./isURLHash";
+import { isURLSearch } from "./isURLSearch";
 
 /**
  * internal. This is used to help us build the return value from URL.parse()
@@ -288,9 +291,63 @@ export class URL extends DataLocation implements Value<string> {
         return URL.format(this.base, parts, onError);
     }
 
-    public join(...urls: string[]) {
-        // placeholder
-        return "";
+    /**
+     * builds a new URL by appending the given parts to this URL
+     *
+     * the returned URL will have the same `base` path that
+     * this URL does
+     *
+     * we apply the parts in the order you give them. Change something
+     * earlier in the URL structure, and we drop everything that comes
+     * after it:
+     *
+     * - a new URL completely replaces anything earlier in the params
+     * - a path change forces us to drop `search` and `hash` segments
+     * - a ?search change forces us to drop the `#hash` segment
+     * - a #hash change doesn't change anything else in the response
+     *
+     * the only way to change the protocol or hostname is to pass in a
+     * new URL as a string.
+     */
+    public join(...urlsOrParts: string[]): URL {
+        // we start with the parts list of our current URL
+        //
+        // we'll update this as we go
+        let parts = this.parse();
+
+        // apply each of the paths we've been given
+        //
+        // our challenge here is that we might have been given a URL
+        // instead of a path
+        for (const urlOrPart of urlsOrParts) {
+            if (isURL(urlOrPart)) {
+                // a full URL replaces our existing URL
+                const tmpURL = URL.fromLocation(urlOrPart);
+                parts = tmpURL.parse();
+            } else if (isURLSearch(urlOrPart)) {
+                // a query string replaces any existing query string we have
+                parts.search = urlOrPart;
+
+                // drop everything that comes after the search segment
+                parts.hash = undefined;
+            } else if (isURLHash(urlOrPart)) {
+                // a #fragment replaces any existing fragment we have
+                parts.hash = urlOrPart;
+
+                // the hash is the last segment of a URL, so we don't
+                // need to drop anything else
+            } else {
+                // a path gets merged into our existing URL's parts
+                parts.pathname = path.posix.join(parts.pathname, urlOrPart);
+
+                // drop everything that comes after the pathname segment
+                parts.search = undefined;
+                parts.hash = undefined;
+            }
+        }
+
+        // all done!
+        return URL.format(this.base, parts);
     }
 
     /**
