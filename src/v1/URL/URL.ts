@@ -37,8 +37,21 @@ import url from "url";
 
 import { DataLocation } from "../DataLocation";
 import { NotAURLError } from "../Errors/NotAURL";
+import { ParsedURL } from "../ParsedURL";
 import { URLFormatOptions } from "../URLFormatOptions";
 import { buildURLHref } from "./buildURLHref";
+
+/**
+ * internal. This is used to help us build the return value from URL.parse()
+ */
+interface URLOptionalPropMap {
+    [key: string]: string;
+
+    port: string;
+    pathname: string;
+    search: string;
+    hash: string;
+}
 
 /**
  * value type. Represents a URL that is built from (up to) two parts:
@@ -258,6 +271,45 @@ export class URL extends DataLocation implements Value<string> {
     public join(...urls: string[]) {
         // placeholder
         return "";
+    }
+
+    /**
+     * breaks down the structure of this URL
+     */
+    public parse(): ParsedURL {
+        const retval: ParsedURL = {
+            protocol: this.protocol,
+            hostname: this.hostname
+        };
+
+        // shorthand
+        const propMap: URLOptionalPropMap = {
+            port: this.port,
+            pathname: this.pathname,
+            search: this.search,
+            hash: this.hash,
+        };
+
+        let propName: string;
+        let propValue: string;
+
+        // tslint:disable-next-line: forin
+        for (propName in propMap) {
+            // shorthand
+            propValue = propMap[propName];
+
+            if (propValue.length > 0) {
+                retval[propName] = propValue;
+            }
+        }
+
+        // special cases
+        if (retval.search) {
+            retval.searchParams = this.searchParams;
+        }
+
+        // all done
+        return retval;
     }
 
     public resolve(...urls: string[]) {

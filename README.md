@@ -577,6 +577,17 @@ export class URL extends DataLocation implements Value<string> {
      * behaves this way.
      */
     public toJSON(): string;
+
+    // =======================================================================
+    //
+    // (PARTIAL) PATH FUNCTIONS
+    //
+    // -----------------------------------------------------------------------
+
+    /**
+     * breaks down the structure of this URL
+     */
+    public parse(): ParsedURL;
 }
 ```
 

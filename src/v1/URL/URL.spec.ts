@@ -37,6 +37,7 @@ import { describe } from "mocha";
 import url from "url";
 
 import { URL } from ".";
+import { ParsedURL } from "../ParsedURL";
 import { URLFormatOptions } from "../URLFormatOptions";
 
 describe("URL value type", () => {
@@ -570,4 +571,37 @@ describe("URL value type", () => {
             expect(actualValue).to.not.eql(expectedValue);
         });
     });
+
+    describe(".parse()", () => {
+        it("returns a breakdown of the URL's contents", () => {
+            const inputLocation = "http://example.com:8080/this/is/a/path?with=search#andFragment";
+            const unit = URL.fromLocation(inputLocation);
+            const expectedValue: ParsedURL = {
+                protocol: "http:",
+                hostname: "example.com",
+                port: "8080",
+                pathname: "/this/is/a/path",
+                search: "?with=search",
+                searchParans: new URLSearchParams("with=search"),
+                hash: "#andFragment",
+            }
+
+            const actualValue = unit.parse();
+
+            expect(actualValue).to.not.eql(expectedValue);
+        });
+
+        it("only sets the fields that have a meaningful value", () => {
+            const inputLocation = "http://example.com";
+            const unit = URL.fromLocation(inputLocation);
+            const expectedValue: ParsedURL = {
+                protocol: "http:",
+                hostname: "example.com",
+            }
+
+            const actualValue = unit.parse();
+
+            expect(actualValue).to.not.eql(expectedValue);
+        });
+    })
 });
