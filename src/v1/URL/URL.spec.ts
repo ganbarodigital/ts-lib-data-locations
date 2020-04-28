@@ -40,6 +40,13 @@ import { URL } from ".";
 import { ParsedURL } from "../ParsedURL";
 import { URLFormatOptions } from "../URLFormatOptions";
 
+class UnitTestClass extends URL
+{
+    public constructor(base: string|null, location: string, onError?: OnError) {
+        super(base, location, onError);
+    }
+}
+
 describe("URL value type", () => {
     describe(".format() static constructor", () => {
         it("accepts a string for the base", () => {
@@ -291,6 +298,49 @@ describe("URL value type", () => {
             }
 
             expect(() => URL.from(null, inputLocation, onError)).to.throw("MY ERROR HANDLER!!!");
+        });
+    });
+
+    describe(".constructor() protected constructor", () => {
+        it("accepts a string for the base", () => {
+            const inputBase = "http://example.com";
+            const inputLocation = "/this/is/an/example";
+
+            const expectedValue = "http://example.com/this/is/an/example";
+            const actualValue = new UnitTestClass(inputBase, inputLocation).toString();
+
+            expect(actualValue).to.equal(expectedValue);
+        });
+
+        it("accepts a `null` as the base", () => {
+            const inputBase = null;
+            const inputLocation = "http://example.com/this/is/an/example";
+
+            const expectedValue = "http://example.com/this/is/an/example";
+            const actualValue = new UnitTestClass(inputBase, inputLocation).toString();
+
+            expect(actualValue).to.equal(expectedValue);
+
+        });
+
+        it("accepts a string for the location", () => {
+            const inputBase = "http://example.com";
+            const inputLocation = "/this/is/an/example";
+
+            const expectedValue = "http://example.com/this/is/an/example";
+            const actualValue = new UnitTestClass(inputBase, inputLocation).toString();
+
+            expect(actualValue).to.equal(expectedValue);
+        });
+
+        it("accepts your own error handler", () => {
+            const inputLocation = "./relativeUrlsNeedABase";
+
+            const onError: OnError = (err: AnyAppError) => {
+                throw new Error("MY ERROR HANDLER!!!");
+            }
+
+            expect(() => new UnitTestClass(null, inputLocation, onError)).to.throw("MY ERROR HANDLER!!!");
         });
     });
 
