@@ -155,7 +155,11 @@ export function buildURLHrefCommonElements(parts: URLFormatOptions): string {
     }
 
     if (parts.hash) {
-        href = href + "#" + parts.hash;
+        // the hash may already start with a '#' character
+        if (!parts.hash.startsWith("#")) {
+            href = href + "#";
+        }
+        href = href + parts.hash;
     }
 
     // all done

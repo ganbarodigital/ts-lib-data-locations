@@ -86,6 +86,14 @@ describe("buildURLHref()", () => {
                 expectedValue: "example.com/#id12345"
             },
             {
+                description: "accepts a hash that starts with a '#'",
+                inputValue: {
+                    hostname: "example.com",
+                    hash: "#id12345",
+                },
+                expectedValue: "example.com/#id12345"
+            },
+            {
                 description: "accepts parts with a path and a hash",
                 inputValue: {
                     hostname: "example.com",
