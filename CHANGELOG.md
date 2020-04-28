@@ -40,6 +40,8 @@ The following changes have been completed, and will be included in the next tagg
   - Added `IpPort` value type
   - Added `formatIpPortAsNumber()` formatter
   - Added `formatIpPortAsString()` formatter
+* ParsedURL
+  - Added `ParsedURL` dumb value type
 * URLFormatOptions
   - Added `isPRURLFormatOptions()` type guard
   - Added `isURLFormatOptionsWithHostname()` type guard

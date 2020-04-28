@@ -31,11 +31,53 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import url from "url";
 
-export * from "./DataLocation";
-export * from "./Errors";
-export * from "./Filepath";
-export * from "./IpPort";
-export * from "./ParsedURL";
-export * from "./URLFormatOptions";
-export * from "./URL";
+/**
+ * the parts of a URL, using terms from the WHATWG specification
+ *
+ * NOTE that we do *NOT* support the `username` and `password` fields.
+ * These are deprecated by RFC 3986, and may not be supported by your
+ * choice of browser AND/OR your destination.
+ *
+ * NOTE that we do *NOT support protocol-relative URLs here, because
+ * the underlying NodeJS URL doesn't support them
+ */
+export interface ParsedURL {
+    [key: string]: string|URLSearchParams|undefined;
+
+    /**
+     * the network protocol to use (eg 'http' or 'https')
+     */
+    protocol: string;
+
+    /**
+     * the server where the remote data is hosted
+     */
+    hostname: string;
+
+    /**
+     * the port number to connect to on the remote hostname
+     */
+    port?: string;
+
+    /**
+     * the query path portion of the URL
+     */
+    pathname?: string;
+
+    /**
+     * the query string portion of the URL
+     */
+    search?: string;
+
+    /**
+     * the query string portion of the URL, as a data bag
+     */
+    searchParams?: url.URLSearchParams;
+
+    /**
+     * the #fragment section of the URL
+     */
+    hash?: string;
+}

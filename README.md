@@ -30,6 +30,7 @@ This TypeScript library provides safe types for filepaths and remote data locati
   - [URLFormatOptionsWithHash](#urlformatoptionswithhash)
   - [isPRURLFormatOptions()](#isprurlformatoptions)
   - [isURLFormatOptionsWithHostname()](#isurlformatoptionswithhostname)
+  - [ParsedURL](#parsedurl)
 - [NPM Scripts](#npm-scripts)
   - [npm run clean](#npm-run-clean)
   - [npm run build](#npm-run-build)
@@ -860,6 +861,63 @@ export function isURLFormatOptionsWithHostname(input: URLFormatOptions): input i
 ```
 
 `isURLFormatOptionsWithHostname()` is a _type guard_. Use it to tell what sub-type of `URLFormatOptions` you have been given.
+
+### ParsedURL
+
+```typescript
+import url from "url";
+
+/**
+ * the parts of a URL, using terms from the WHATWG specification
+ *
+ * NOTE that we do *NOT* support the `username` and `password` fields.
+ * These are deprecated by RFC 3986, and may not be supported by your
+ * choice of browser AND/OR your destination.
+ *
+ * NOTE that we do *NOT support protocol-relative URLs here, because
+ * the underlying NodeJS URL doesn't support them
+ */
+export interface ParsedURL {
+    [key: string]: string|URLSearchParams|undefined;
+
+    /**
+     * the network protocol to use (eg 'http' or 'https')
+     */
+    protocol: string;
+
+    /**
+     * the server where the remote data is hosted
+     */
+    hostname: string;
+
+    /**
+     * the port number to connect to on the remote hostname
+     */
+    port?: string;
+
+    /**
+     * the query path portion of the URL
+     */
+    pathname?: string;
+
+    /**
+     * the query string portion of the URL
+     */
+    search?: string;
+
+    /**
+     * the query string portion of the URL, as a data bag
+     */
+    searchParams?: url.URLSearchParams;
+
+    /**
+     * the #fragment section of the URL
+     */
+    hash?: string;
+}
+```
+
+`ParsedURL` is a _value object_. It contains a breakdown of the parts that make up a [`URL`](#url-value-type). It's used as the return type from `URL.parse()`.
 
 ## NPM Scripts
 
