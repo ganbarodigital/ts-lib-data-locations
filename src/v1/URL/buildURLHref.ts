@@ -151,7 +151,11 @@ export function buildURLHrefCommonElements(parts: URLFormatOptions): string {
     }
 
     if (parts.search) {
-        href = href + "?" + parts.search;
+        // the search may already start with a '?' character
+        if (!parts.search.startsWith("?")) {
+            href = href + "?";
+        }
+        href = href + parts.search;
     }
 
     if (parts.hash) {

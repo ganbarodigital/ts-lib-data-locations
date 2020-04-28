@@ -111,6 +111,14 @@ describe("buildURLHref()", () => {
                 expectedValue: "example.com/?alpha=gamma"
             },
             {
+                description: "accepts a search that starts with a '?'",
+                inputValue: {
+                    hostname: "example.com",
+                    search: "?alpha=gamma"
+                },
+                expectedValue: "example.com/?alpha=gamma"
+            },
+            {
                 description: "accepts parts with a path and a search",
                 inputValue: {
                     hostname: "example.com",
