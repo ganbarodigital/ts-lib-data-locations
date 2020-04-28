@@ -48,7 +48,6 @@ interface URLOptionalPropMap {
     [key: string]: string;
 
     port: string;
-    pathname: string;
     search: string;
     hash: string;
 }
@@ -279,13 +278,13 @@ export class URL extends DataLocation implements Value<string> {
     public parse(): ParsedURL {
         const retval: ParsedURL = {
             protocol: this.protocol,
-            hostname: this.hostname
+            hostname: this.hostname,
+            pathname: this.pathname,
         };
 
         // shorthand
         const propMap: URLOptionalPropMap = {
             port: this.port,
-            pathname: this.pathname,
             search: this.search,
             hash: this.hash,
         };

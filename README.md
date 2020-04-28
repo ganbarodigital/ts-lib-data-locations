@@ -909,7 +909,7 @@ export interface ParsedURL {
     /**
      * the query path portion of the URL
      */
-    pathname?: string;
+    pathname: string;
 
     /**
      * the query string portion of the URL
