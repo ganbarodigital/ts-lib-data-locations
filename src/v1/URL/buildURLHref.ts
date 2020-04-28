@@ -89,7 +89,13 @@ export function buildURLHrefWithHostname(parts: URLFormatOptionsWithHostname): s
 
     // the protocol is optional, because we have a hostname
     if (parts.protocol) {
-        href = parts.protocol + "://";
+        // special case - if the protocol came from an existing URL
+        // object, it might already have a ':' on the end of it (sigh)
+        if (parts.protocol.endsWith(":")) {
+            href = parts.protocol + "//";
+        } else {
+            href = parts.protocol + "://";
+        }
     }
 
     // add in the hostname and (optional) port number

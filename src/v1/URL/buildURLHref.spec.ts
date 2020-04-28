@@ -55,6 +55,14 @@ describe("buildURLHref()", () => {
                 expectedValue: "https://example.com"
             },
             {
+                description: "accepts a protocol that ends with a ':'",
+                inputValue: {
+                    protocol: "https:",
+                    hostname: "example.com",
+                },
+                expectedValue: "https://example.com"
+            },
+            {
                 description: "accepts a hostname with no protocol",
                 inputValue: {
                     hostname: "example.com",
