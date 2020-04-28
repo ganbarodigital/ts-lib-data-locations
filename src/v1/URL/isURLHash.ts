@@ -31,8 +31,15 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
-export { buildURLHref } from "./buildURLHref";
-export * from "./isURL";
-export * from "./isURLHash";
-export * from "./isURLSearch";
-export * from "./URL";
+
+export const URLHashRegex = new RegExp("^#.+$");
+
+/**
+ * data guard. Is the given input a URL hash (aka a fragment)?
+ *
+ * the entire input must have the structure of a URL hash,
+ * for it to match
+ */
+export function isURLHash(input: string): boolean {
+    return URLHashRegex.test(input);
+}

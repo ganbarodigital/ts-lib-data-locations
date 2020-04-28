@@ -31,8 +31,39 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
-export { buildURLHref } from "./buildURLHref";
-export * from "./isURL";
-export * from "./isURLHash";
-export * from "./isURLSearch";
-export * from "./URL";
+import { expect } from "chai";
+import { describe } from "mocha";
+
+import { isURLHash } from ".";
+
+interface UnitTestData {
+    description: string;
+    inputValue: string;
+    expectedValue: boolean;
+}
+
+describe("isURLHash()", () => {
+    const unitTestDataset: UnitTestData[] = [
+        {
+            description: "accepts a hash starting with a #",
+            inputValue: "#id12345",
+            expectedValue: true,
+        },
+        {
+            description: "rejects an input that does not have a #",
+            inputValue: "id12345",
+            expectedValue: false,
+        },
+    ];
+
+    for (const unitTestData of unitTestDataset) {
+        it(unitTestData.description, () => {
+            // shorthand
+            const inputValue = unitTestData.inputValue;
+            const expectedValue = unitTestData.expectedValue;
+
+            const actualValue = isURLHash(inputValue);
+            expect(actualValue).to.equal(expectedValue);
+        });
+    }
+});
