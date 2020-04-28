@@ -582,13 +582,13 @@ describe("URL value type", () => {
                 port: "8080",
                 pathname: "/this/is/a/path",
                 search: "?with=search",
-                searchParans: new URLSearchParams("with=search"),
+                searchParams: new URLSearchParams("with=search"),
                 hash: "#andFragment",
             }
 
             const actualValue = unit.parse();
 
-            expect(actualValue).to.not.eql(expectedValue);
+            expect(actualValue).to.eql(expectedValue);
         });
 
         it("only sets the fields that have a meaningful value", () => {
@@ -597,11 +597,12 @@ describe("URL value type", () => {
             const expectedValue: ParsedURL = {
                 protocol: "http:",
                 hostname: "example.com",
+                pathname: "/",
             }
 
             const actualValue = unit.parse();
 
-            expect(actualValue).to.not.eql(expectedValue);
+            expect(actualValue).to.eql(expectedValue);
         });
-    })
+    });
 });
