@@ -755,4 +755,123 @@ describe("URL value type", () => {
             expect(actualValue).to.eql(expectedValue);
         });
     });
+
+    describe(".resolve()", () => {
+        it("returns a new URL with our path changes", () => {
+            const inputLocation = "http://example.com:8080/this/is/a/path?with=search#andFragment";
+            const unit = URL.fromLocation(inputLocation);
+            const expectedValue = URL.fromLocation("http://example.com:8080/this/is/an/example");
+
+            const actualValue = unit.resolve("..", "..", "an/example");
+
+            expect(actualValue).to.eql(expectedValue);
+        });
+
+        it("returns a new URL with its own base value", () => {
+            const inputBase = "http://example.com:8080/this/is/";
+            const inputLocation = "a/path?with=search#andFragment";
+            const unit = URL.from(inputBase, inputLocation);
+            const expectedValue = URL.fromBase("http://example.com:8080/this/is/an/example").base;
+
+            const actualValue = unit.resolve("..", "..", "an/example").base;
+
+            expect(actualValue).to.equal(expectedValue);
+        });
+
+        it("accepts a mix of URLs and paths", () => {
+            const inputLocation = "http://example.com:8080/this/is/a/path?with=search#andFragment";
+            const unit = URL.fromLocation(inputLocation);
+            const expectedValue = URL.fromLocation("http://www.example.com/different/and/an/example");
+
+            const actualValue = unit.resolve(
+                "http://www.example.com/different/and",
+                "..", "..", "an/example"
+            );
+
+            expect(actualValue).to.eql(expectedValue);
+        });
+
+        it("accepts a mix of URLs and paths and query strings", () => {
+            const inputLocation = "http://example.com:8080/this/is/a/path?with=search#andFragment";
+            const unit = URL.fromLocation(inputLocation);
+            const expectedValue = URL.fromLocation("http://www.example.com/different/and/an/example?thisIs=aSearch");
+
+            const actualValue = unit.resolve(
+                "http://www.example.com/different/and",
+                "..", "..", "an/example",
+                "?thisIs=aSearch",
+            );
+
+            expect(actualValue).to.eql(expectedValue);
+        });
+
+        it("changing the query string drops the hash", () => {
+            const inputLocation = "http://example.com:8080/this/is/a/path?with=search#andFragment";
+            const unit = URL.fromLocation(inputLocation);
+            const expectedValue = URL.fromLocation("http://example.com:8080/this/is/a/path?thisIs=aSearch");
+
+            const actualValue = unit.resolve(
+                "?thisIs=aSearch",
+            );
+
+            expect(actualValue).to.eql(expectedValue);
+        });
+
+        it("the hash can be changed without affecting the query string", () => {
+            const inputLocation = "http://example.com:8080/this/is/a/path?with=search#andFragment";
+            const unit = URL.fromLocation(inputLocation);
+            const expectedValue = URL.fromLocation("http://example.com:8080/this/is/a/path?with=search#anotherFragment");
+
+            const actualValue = unit.resolve(
+                "#anotherFragment",
+            );
+
+            expect(actualValue).to.eql(expectedValue);
+        });
+
+        it("accepts a mix of URLs and paths and query strings and hashes", () => {
+            const inputLocation = "http://example.com:8080/this/is/a/path?with=search#andFragment";
+            const unit = URL.fromLocation(inputLocation);
+            const expectedValue = URL.fromLocation("http://www.example.com/different/and/an/example?thisIs=aSearch#withFragment");
+
+            const actualValue = unit.resolve(
+                "http://www.example.com/different/and",
+                "..", "..", "an/example",
+                "?thisIs=aSearch",
+                "#withFragment",
+            );
+
+            expect(actualValue).to.eql(expectedValue);
+        });
+
+        it("path changes cause any prior hash to be dropped", () => {
+            const inputLocation = "http://example.com:8080/this/is/a/path?with=search#andFragment";
+            const unit = URL.fromLocation(inputLocation);
+            const expectedValue = URL.fromLocation("http://www.example.com/different/and/an/example?thisIs=aSearch");
+
+            const actualValue = unit.resolve(
+                "http://www.example.com/different/and",
+                "#withFragment",
+                "..", "..", "an/example",
+                "?thisIs=aSearch",
+            );
+
+            expect(actualValue).to.eql(expectedValue);
+        });
+
+        it("path changes cause any prior search to be dropped", () => {
+            const inputLocation = "http://example.com:8080/this/is/a/path?with=search#andFragment";
+            const unit = URL.fromLocation(inputLocation);
+            const expectedValue = URL.fromLocation("http://www.example.com/different/and/an/example#withFragment");
+
+            const actualValue = unit.resolve(
+                "http://www.example.com/different/and",
+                "?thisIs=aSearch",
+                "..", "..", "an/example",
+                "#withFragment",
+            );
+
+            expect(actualValue).to.eql(expectedValue);
+        });
+    });
 });
