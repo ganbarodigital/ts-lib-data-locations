@@ -572,6 +572,37 @@ describe("URL value type", () => {
         });
     });
 
+    describe(".dirname()", () => {
+        it("returns a URL that points to the parent of this URL", () => {
+            const inputLocation = "http://example.com:8080/this/is/a/path?with=search#andFragment";
+            const unit = URL.fromLocation(inputLocation);
+            const expectedValue = URL.from(null, "http://example.com:8080/this/is/a");
+            const actualValue = unit.dirname();
+
+            expect(actualValue).to.eql(expectedValue);
+        });
+
+        it("returns the root URL, if given a URL with no path", () => {
+            const inputLocation = "http://example.com:8080?with=search#andFragment";
+            const unit = URL.fromLocation(inputLocation);
+            const expectedValue = URL.from(null, "http://example.com:8080/");
+            const actualValue = unit.dirname();
+
+            expect(actualValue).to.eql(expectedValue);
+        });
+
+        it("returns a URL with the same `base` as the original URL", () => {
+            const inputBase = "http://example.com:8080";
+            const inputLocation = "/this/is/a/path?with=search#andFragment";
+            const expectedValue = URL.from(inputBase, "/this/is/a");
+
+            const unit = URL.from(inputBase, inputLocation);
+            const actualValue = unit.dirname();
+
+            expect(actualValue).to.eql(expectedValue);
+        });
+    });
+
     describe(".parse()", () => {
         it("returns a breakdown of the URL's contents", () => {
             const inputLocation = "http://example.com:8080/this/is/a/path?with=search#andFragment";

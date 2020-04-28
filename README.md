@@ -585,6 +585,17 @@ export class URL extends DataLocation implements Value<string> {
     // -----------------------------------------------------------------------
 
     /**
+     * get the parent of this path
+     *
+     * the returned URL will have:
+     *
+     * - the same `base` as this URL
+     * - any `search` parameters removed
+     * - any `hash` fragment removed
+     */
+    public dirname(): URL;
+
+    /**
      * breaks down the structure of this URL
      */
     public parse(): ParsedURL;

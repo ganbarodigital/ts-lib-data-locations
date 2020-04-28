@@ -33,6 +33,7 @@
 //
 import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
 import { Value } from "@ganbarodigital/ts-lib-value-objects/lib/v2";
+import path from "path";
 import url from "url";
 
 import { DataLocation } from "../DataLocation";
@@ -266,6 +267,26 @@ export class URL extends DataLocation implements Value<string> {
     // (PARTIAL) PATH FUNCTIONS
     //
     // -----------------------------------------------------------------------
+
+    /**
+     * get the parent of this path
+     *
+     * the returned URL will have:
+     *
+     * - the same `base` as this URL
+     * - any `search` parameters removed
+     * - any `hash` fragment removed
+     */
+    public dirname(): URL {
+        const parts = this.parse();
+        parts.pathname = path.posix.dirname(parts.pathname);
+
+        // we need to drop these
+        parts.search = undefined;
+        parts.hash = undefined;
+
+        return URL.format(this.base, parts);
+    }
 
     public join(...urls: string[]) {
         // placeholder
