@@ -924,9 +924,9 @@ import {
  * type guard. Returns `true` if `input` is the sub-type that
  * contains a hostname
  */
-export function isURLFormatOptionsWithHostname(input: URLFormatOptions): input is URLFormatOptionsWithHostname {
-    return (input as URLFormatOptionsWithHostname).hostname !== undefined;
-}
+export function isURLFormatOptionsWithHostname(
+    input: URLFormatOptions
+): input is URLFormatOptionsWithHostname;
 ```
 
 `isURLFormatOptionsWithHostname()` is a _type guard_. Use it to tell what sub-type of `URLFormatOptions` you have been given.
