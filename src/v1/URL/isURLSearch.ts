@@ -32,10 +32,14 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 
-export * from "./DataLocation";
-export * from "./Errors";
-export * from "./Filepath";
-export * from "./IpPort";
-export * from "./ParsedURL";
-export * from "./URLFormatOptions";
-export * from "./URL";
+export const URLSearchRegex = new RegExp("^(\\?)*([^=]+)=(.+)+$");
+
+/**
+ * data guard. Is the given input a URL search term?
+ *
+ * the entire input must have the structure of a URL search term,
+ * for it to match
+ */
+export function isURLSearch(input: string): boolean {
+    return URLSearchRegex.test(input);
+}

@@ -32,10 +32,14 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 
-export * from "./DataLocation";
-export * from "./Errors";
-export * from "./Filepath";
-export * from "./IpPort";
-export * from "./ParsedURL";
-export * from "./URLFormatOptions";
-export * from "./URL";
+export const URLHashRegex = new RegExp("^#.+$");
+
+/**
+ * data guard. Is the given input a URL hash (aka a fragment)?
+ *
+ * the entire input must have the structure of a URL hash,
+ * for it to match
+ */
+export function isURLHash(input: string): boolean {
+    return URLHashRegex.test(input);
+}

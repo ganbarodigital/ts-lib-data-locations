@@ -31,11 +31,39 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import { expect } from "chai";
+import { describe } from "mocha";
+import path from "path";
 
-export * from "./DataLocation";
-export * from "./Errors";
-export * from "./Filepath";
-export * from "./IpPort";
-export * from "./ParsedURL";
-export * from "./URLFormatOptions";
-export * from "./URL";
+import { resolveFilepath } from ".";
+
+describe("resolveFilepath()", () => {
+    describe("when `base` is `null`", () => {
+        it("returns the unmodified location on POSIX", () => {
+            const inputValue = "/tmp/example";
+            const expectedValue = inputValue;
+            const actualValue = resolveFilepath(null, inputValue, path.posix);
+
+            expect(actualValue).to.equal(expectedValue);
+        });
+
+        it("returns '..' when the location is '..' on both platforms", () => {
+            const inputValue = "..";
+            const expectedValue = inputValue;
+            const actualValue = resolveFilepath(null, inputValue);
+
+            expect(actualValue).to.equal(expectedValue);
+        });
+    });
+
+    describe("when `base` is NOT `null`", () => {
+        it("merges a relative location into the `base` on POSIX", () => {
+            const inputBase = "/tmp/example";
+            const inputLocation = "../alfred/trout";
+            const expectedValue = "/tmp/alfred/trout";
+            const actualValue = resolveFilepath(inputBase, inputLocation, path.posix);
+
+            expect(actualValue).to.equal(expectedValue);
+        });
+    });
+});

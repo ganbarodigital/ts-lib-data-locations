@@ -31,11 +31,11 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import { PRURLFormatOptions, URLFormatOptions } from ".";
 
-export * from "./DataLocation";
-export * from "./Errors";
-export * from "./Filepath";
-export * from "./IpPort";
-export * from "./ParsedURL";
-export * from "./URLFormatOptions";
-export * from "./URL";
+/**
+ * type guard. Returns `true` if `input` is a `PRURLFormatOptions` type
+ */
+export function isPRURLFormatOptions(input: URLFormatOptions): input is PRURLFormatOptions {
+    return (input as PRURLFormatOptions).protocolRelative !== undefined;
+}

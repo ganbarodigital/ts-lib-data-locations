@@ -31,11 +31,12 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import { URLFormatOptions, URLFormatOptionsWithHostname } from ".";
 
-export * from "./DataLocation";
-export * from "./Errors";
-export * from "./Filepath";
-export * from "./IpPort";
-export * from "./ParsedURL";
-export * from "./URLFormatOptions";
-export * from "./URL";
+/**
+ * type guard. Returns `true` if `input` is the sub-type that
+ * contains a hostname
+ */
+export function isURLFormatOptionsWithHostname(input: URLFormatOptions): input is URLFormatOptionsWithHostname {
+    return (input as URLFormatOptionsWithHostname).hostname !== undefined;
+}

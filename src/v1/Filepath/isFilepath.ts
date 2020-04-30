@@ -31,11 +31,37 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import path from "path";
 
-export * from "./DataLocation";
-export * from "./Errors";
-export * from "./Filepath";
-export * from "./IpPort";
-export * from "./ParsedURL";
-export * from "./URLFormatOptions";
-export * from "./URL";
+import { PathApi } from ".";
+import { isURL } from "../URL";
+
+/**
+ * data guard.
+ *
+ * do `base` and `location` combine to (possibly) be a location on a
+ * filesystem?
+ *
+ * we don't check whether the path exists, or even that it's a valid path
+ * for the filesystem it would map onto ... merely that it *could* be a
+ * credible path
+ *
+ * @param base
+ *        the base folder / file to start from
+ * @param location
+ *        the (possibly absolute) path to add to `base`
+ */
+export function isFilepath(base: string|null, location: string, api: PathApi = path): boolean {
+    // make sure we haven't been given an explicit URL
+    if (isURL(location)) {
+        return false;
+    }
+
+    // check the `base` too, in case that's a URL
+    if (base && isURL(base)) {
+        return false;
+    }
+
+    // it's probably a filepath
+    return true;
+}

@@ -32,10 +32,8 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 
-export * from "./DataLocation";
-export * from "./Errors";
+export * from "./PathApi";
+export * from "./isFilepath";
+export * from "./mustBeFilepath";
+export * from "./resolveFilepath";
 export * from "./Filepath";
-export * from "./IpPort";
-export * from "./ParsedURL";
-export * from "./URLFormatOptions";
-export * from "./URL";

@@ -31,11 +31,45 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import { expect } from "chai";
+import { describe } from "mocha";
 
-export * from "./DataLocation";
-export * from "./Errors";
-export * from "./Filepath";
-export * from "./IpPort";
-export * from "./ParsedURL";
-export * from "./URLFormatOptions";
-export * from "./URL";
+import { isPRURLFormatOptions } from "./isPRURLFormatOptions";
+import { PRURLFormatOptions } from "./URLFormatOptions";
+
+describe("isPRURLFormatOptions()", () => {
+    it("returns `true` is input has `protocolRelative = true` field", () => {
+        // shorthand
+        const inputValue: PRURLFormatOptions = {
+            protocolRelative: true,
+            hostname: "example.com",
+        }
+        const expectedValue = true;
+
+        const actualValue = isPRURLFormatOptions(inputValue);
+        expect(actualValue).to.equal(expectedValue);
+    });
+
+    it("returns `true` is input has `protocolRelative = false` field", () => {
+        // shorthand
+        const inputValue: PRURLFormatOptions = {
+            protocolRelative: false,
+            hostname: "example.com",
+        }
+        const expectedValue = true;
+
+        const actualValue = isPRURLFormatOptions(inputValue);
+        expect(actualValue).to.equal(expectedValue);
+    });
+
+    it("returns `false` is input has no `protocolRelative` field", () => {
+        // shorthand
+        const inputValue = {
+            hostname: "example.com",
+        }
+        const expectedValue = false;
+
+        const actualValue = isPRURLFormatOptions(inputValue);
+        expect(actualValue).to.equal(expectedValue);
+    });
+});

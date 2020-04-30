@@ -31,11 +31,33 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import { ErrorTable, ErrorTableTemplate } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+import { httpStatusCodeFrom } from "@ganbarodigital/ts-lib-http-types/lib/v1";
+import { packageNameFrom } from "@ganbarodigital/ts-lib-packagename/lib/v1";
 
-export * from "./DataLocation";
-export * from "./Errors";
-export * from "./Filepath";
-export * from "./IpPort";
-export * from "./ParsedURL";
-export * from "./URLFormatOptions";
-export * from "./URL";
+import { NotAFilepathTemplate } from "./NotAFilepath";
+import { NotAURLTemplate } from "./NotAURL";
+
+const PACKAGE_NAME = packageNameFrom("@ganbarodigital/ts-lib-mediatypes");
+
+type PackageErrorTableIndex<T extends ErrorTable> = ErrorTableTemplate<T, string>;
+
+export class PackageErrorTable implements ErrorTable {
+    [key: string]: PackageErrorTableIndex<PackageErrorTable>;
+
+    public "not-a-filepath": NotAFilepathTemplate = {
+        packageName: PACKAGE_NAME,
+        errorName: "not-a-filepath",
+        detail: "the given string does not have the structure of a filepath (probably a URL instead)",
+        status: httpStatusCodeFrom(422),
+    };
+
+    public "not-a-url": NotAURLTemplate = {
+        packageName: PACKAGE_NAME,
+        errorName: "not-a-url",
+        detail: "cannot build a valid URL from the given parts",
+        status: httpStatusCodeFrom(422),
+    };
+}
+
+export const ERROR_TABLE = new PackageErrorTable();

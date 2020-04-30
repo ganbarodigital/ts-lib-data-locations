@@ -32,10 +32,9 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 
-export * from "./DataLocation";
-export * from "./Errors";
-export * from "./Filepath";
-export * from "./IpPort";
-export * from "./ParsedURL";
-export * from "./URLFormatOptions";
-export * from "./URL";
+/**
+ * value type
+ *
+ * represents the port number of an IP address.
+ */
+export type IpPort = string|number;

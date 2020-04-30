@@ -1,3 +1,4 @@
+/* eslint-disable prefer-arrow/prefer-arrow-functions */
 //
 // Copyright (c) 2020-present Ganbaro Digital Ltd
 // All rights reserved.
@@ -31,11 +32,32 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
+import path from "path";
 
-export * from "./DataLocation";
-export * from "./Errors";
-export * from "./Filepath";
-export * from "./IpPort";
-export * from "./ParsedURL";
-export * from "./URLFormatOptions";
-export * from "./URL";
+import { isFilepath, PathApi } from ".";
+import { NotAFilepathError } from "../Errors";
+
+/**
+ * data guarantee. throws an error if the given `base` & `location` do not
+ * appear to be a filesystem path
+ *
+ * @param base
+ *        the base file/folder to use
+ * @param location
+ *        the possible path to investigate
+ * @param onError
+ *        your error handler
+ */
+export function mustBeFilepath(
+    base: string|null,
+    location: string,
+    onError: OnError = THROW_THE_ERROR,
+    api: PathApi = path,
+): void {
+    if (isFilepath(base, location, api)) {
+        return;
+    }
+
+    throw onError(new NotAFilepathError({public: { base, location }}));
+}

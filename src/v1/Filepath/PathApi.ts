@@ -31,11 +31,26 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import path from "path";
 
-export * from "./DataLocation";
-export * from "./Errors";
-export * from "./Filepath";
-export * from "./IpPort";
-export * from "./ParsedURL";
-export * from "./URLFormatOptions";
-export * from "./URL";
+/**
+ * this is the API provided by both `path.posix` and `path.win32`
+ *
+ * we use this to help with unit testing
+ */
+export interface PathApi {
+    delimiter: string;
+    sep: string;
+
+    basename(path: string, ext?: string): string;
+    dirname(path: string): string;
+    extname(path: string): string;
+    format(pathObject: path.ParsedPath): string;
+    isAbsolute(path: string): boolean;
+    join(...paths: string[]): string;
+    normalize(path: string): string;
+    parse(path: string): path.ParsedPath;
+    relative(from: string, to: string): string;
+    resolve(...paths: string[]): string;
+    toNamespacedPath(path: string): string;
+}

@@ -31,11 +31,15 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import { IpPort } from "./IpPort";
 
-export * from "./DataLocation";
-export * from "./Errors";
-export * from "./Filepath";
-export * from "./IpPort";
-export * from "./ParsedURL";
-export * from "./URLFormatOptions";
-export * from "./URL";
+/**
+ * convert an IpPort interface to be a valid string
+ */
+export function formatIpPortAsString(port: IpPort): string {
+    if (typeof port === "string") {
+        port = Number(port);
+    }
+
+    return Math.floor(port).toFixed(0);
+}

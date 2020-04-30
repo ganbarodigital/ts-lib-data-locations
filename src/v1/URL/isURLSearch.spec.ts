@@ -31,11 +31,54 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import { expect } from "chai";
+import { describe } from "mocha";
 
-export * from "./DataLocation";
-export * from "./Errors";
-export * from "./Filepath";
-export * from "./IpPort";
-export * from "./ParsedURL";
-export * from "./URLFormatOptions";
-export * from "./URL";
+import { isURLSearch } from ".";
+
+interface UnitTestData {
+    description: string;
+    inputValue: string;
+    expectedValue: boolean;
+}
+
+describe("isURLSearch()", () => {
+    const unitTestDataset: UnitTestData[] = [
+        {
+            description: "accepts a simple search starting with a ?",
+            inputValue: "?abc123=yes",
+            expectedValue: true,
+        },
+        {
+            description: "accepts a simple search that doesn't start with a ?",
+            inputValue: "abc123=yes",
+            expectedValue: true,
+        },
+        {
+            description: "rejects a string that doesn't have an = sign in it",
+            inputValue: "abc123",
+            expectedValue: false,
+        },
+        {
+            description: "accepts a search containing multiple items",
+            inputValue: "?name=ferret&color=purple",
+            expectedValue: true,
+        },
+        {
+            description: "accepts a search containing array items",
+            inputValue: "?name[]=alfred&name[]=bruce",
+            expectedValue: true,
+        },
+    ];
+
+    for (const unitTestData of unitTestDataset) {
+        it(unitTestData.description, () => {
+            // shorthand
+            const inputValue = unitTestData.inputValue;
+            const expectedValue = unitTestData.expectedValue;
+
+            const actualValue = isURLSearch(inputValue);
+            expect(actualValue).to.equal(expectedValue);
+        });
+    }
+});

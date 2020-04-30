@@ -31,11 +31,6 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
-
-export * from "./DataLocation";
-export * from "./Errors";
-export * from "./Filepath";
-export * from "./IpPort";
-export * from "./ParsedURL";
 export * from "./URLFormatOptions";
-export * from "./URL";
+export * from "./isPRURLFormatOptions";
+export * from "./isURLFormatOptionsWithHostname";

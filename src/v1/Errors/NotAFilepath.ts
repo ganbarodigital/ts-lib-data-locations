@@ -31,11 +31,61 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+import {
+    AppError,
+    AppErrorParams,
+    ErrorTableTemplate,
+    ExtraPublicData,
+    StructuredProblemReport,
+    StructuredProblemReportDataWithExtraData,
+} from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
 
-export * from "./DataLocation";
-export * from "./Errors";
-export * from "./Filepath";
-export * from "./IpPort";
-export * from "./ParsedURL";
-export * from "./URLFormatOptions";
-export * from "./URL";
+import { ERROR_TABLE, PackageErrorTable } from "./PackageErrorTable";
+
+export interface NotAFilepathExtraData extends ExtraPublicData {
+    public: {
+        base: string | null;
+        location: string;
+    };
+}
+
+export type NotAFilepathTemplate = ErrorTableTemplate<
+    PackageErrorTable,
+    "not-a-filepath"
+>;
+
+export type NotAFilepathData = StructuredProblemReportDataWithExtraData<
+    PackageErrorTable,
+    "not-a-filepath",
+    NotAFilepathTemplate,
+    NotAFilepathExtraData
+>;
+
+export type NotAFilepathSPR = StructuredProblemReport<
+    PackageErrorTable,
+    "not-a-filepath",
+    NotAFilepathTemplate,
+    NotAFilepathExtraData,
+    NotAFilepathData
+>;
+
+export class NotAFilepathError extends AppError<
+    PackageErrorTable,
+    "not-a-filepath",
+    NotAFilepathTemplate,
+    NotAFilepathExtraData,
+    NotAFilepathData,
+    NotAFilepathSPR
+> {
+    public constructor(params: NotAFilepathExtraData & AppErrorParams) {
+        const errorData: NotAFilepathData = {
+            template: ERROR_TABLE["not-a-filepath"],
+            errorId: params.errorId,
+            extra: {
+                public: params.public,
+            },
+        };
+
+        super(StructuredProblemReport.from(errorData));
+    }
+}
