@@ -62,7 +62,7 @@ Modern spec and schema files (such as OpenAPI Spec v3 and JSON Schema) allow you
 * in a completely different file
 * in a remote file
 
-We can all each of these a `DataLocation`, and build some safe types to support them.
+We can call each of these a `DataLocation`, and build some safe types to support them.
 
 Each `DataLocation` is built from:
 
