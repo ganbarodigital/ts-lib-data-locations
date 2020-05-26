@@ -32,6 +32,8 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 
+import { addExtension } from "@ganbarodigital/ts-lib-augmentations/lib/v1";
+
 export interface DataLocationConstructor {
     // tslint:disable-next-line: callable-types
     new (base: string|null, location: string): DataLocation;
@@ -113,6 +115,19 @@ export abstract class DataLocation {
      */
     get location(): string {
         return this.#location;
+    }
+
+    /**
+     * adds an additional feature to the DataLocation data type
+     *
+     * @template S
+     * @param {S} source
+     * @param {S} [seed]
+     * @returns {(DataLocation & S)}
+     * @memberof DataLocation
+     */
+    public addExtension<S>(source: S, seed?: S): DataLocation & S {
+        return addExtension(this, source, seed);
     }
 
     public abstract valueOf(): string;

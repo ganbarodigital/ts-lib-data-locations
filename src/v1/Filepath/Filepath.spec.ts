@@ -52,6 +52,17 @@ class UnitTestClass extends Filepath
     }
 }
 
+// protocol & extension needed to test addExtension()
+interface AddDummyFeature {
+    getDummyValue(): string;
+}
+// tslint:disable-next-line: max-classes-per-file
+class FilepathAddDummyFeature extends Filepath implements AddDummyFeature {
+    public getDummyValue() {
+        return "dummy value";
+    }
+}
+
 describe("Filepath", () => {
     describe("parent", () => {
         it("is a DataLocation", () => {
@@ -405,6 +416,18 @@ describe("Filepath", () => {
 
             expect(actualCallList).to.eql(expectedCallList);
             expect(actualParamList).to.eql(expectParamList);
+        });
+    });
+
+    describe(".addExtension()", () => {
+        it("adds extra features to the Filepath type", () => {
+            const expectedValue = "dummy value";
+
+            const unit = Filepath.fromBase("/tmp/example")
+                         .addExtension(FilepathAddDummyFeature.prototype);
+
+            const actualValue = unit.getDummyValue();
+            expect(actualValue).to.equal(expectedValue);
         });
     });
 

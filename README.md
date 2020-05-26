@@ -111,6 +111,13 @@ export class DataLocation {
         base: DataLocation|string|null,
         location: DataLocation|string
     );
+
+    /**
+     * add an extra feature to this DataLocation
+     *
+     * See @ganbarodigital/ts-lib-augmentations for details
+     */
+    public addExtension<S>(source: S, seed?: S): DataLocation & S;
 }
 ```
 
