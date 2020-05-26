@@ -117,7 +117,7 @@ export class DataLocation {
      *
      * See @ganbarodigital/ts-lib-augmentations for details
      */
-    public addExtension<S>(source: S, seed?: S): DataLocation & S;
+    public addExtension<S>(source: S, seed?: S): this & S;
 }
 ```
 
