@@ -126,7 +126,7 @@ export abstract class DataLocation {
      * @returns {(DataLocation & S)}
      * @memberof DataLocation
      */
-    public addExtension<S>(source: S, seed?: S): DataLocation & S {
+    public addExtension<S>(source: S, seed?: S): this & S {
         return addExtension(this, source, seed);
     }
 

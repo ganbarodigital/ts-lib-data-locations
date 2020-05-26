@@ -428,6 +428,12 @@ describe("Filepath", () => {
 
             const actualValue = unit.getDummyValue();
             expect(actualValue).to.equal(expectedValue);
+
+            // prove that this is still a Filepath too!
+            //
+            // the compiler is broken here, so this test
+            // may start failing due to a future release of TypeScript
+            expect(unit.isAbsolute()).to.equal(true);
         });
     });
 
