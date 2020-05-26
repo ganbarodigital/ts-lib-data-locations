@@ -1,6 +1,6 @@
 {
   "name": "@ganbarodigital/ts-lib-data-locations",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Safe types for filepaths and remote data locations",
   "repository": "github:ganbarodigital/ts-lib-data-locations",
   "main": "lib/index.js",
@@ -25,6 +25,7 @@
   ],
   "license": "BSD-3-Clause",
   "dependencies": {
+    "@ganbarodigital/ts-lib-augmentations": "^0.2.1",
     "@ganbarodigital/ts-lib-error-reporting": "^0.3.0",
     "@ganbarodigital/ts-lib-http-types": "^0.3.0",
     "@ganbarodigital/ts-lib-mediatype": "^1.0.2",

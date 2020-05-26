@@ -62,7 +62,7 @@ Modern spec and schema files (such as OpenAPI Spec v3 and JSON Schema) allow you
 * in a completely different file
 * in a remote file
 
-We can all each of these a `DataLocation`, and build some safe types to support them.
+We can call each of these a `DataLocation`, and build some safe types to support them.
 
 Each `DataLocation` is built from:
 
@@ -111,6 +111,13 @@ export class DataLocation {
         base: DataLocation|string|null,
         location: DataLocation|string
     );
+
+    /**
+     * add an extra feature to this DataLocation
+     *
+     * See @ganbarodigital/ts-lib-augmentations for details
+     */
+    public addExtension<S>(source: S, seed?: S): DataLocation & S;
 }
 ```
 
