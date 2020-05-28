@@ -40,7 +40,8 @@ import {
     StructuredProblemReportDataWithExtraData,
 } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
 
-import { ERROR_TABLE, PackageErrorTable } from "./PackageErrorTable";
+import { ERROR_TABLE } from ".";
+import { PackageErrorTable } from "./PackageErrorTable";
 
 export interface NotAFilepathExtraData extends ExtraPublicData {
     public: {

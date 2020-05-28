@@ -32,7 +32,6 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
-import { Value } from "@ganbarodigital/ts-lib-value-objects/lib/v2";
 import path from "path";
 
 import { DataLocation } from "../DataLocation";
@@ -47,7 +46,7 @@ import { resolveFilepath } from "./resolveFilepath";
  * The thing it points at does not have to exist, and isn't guaranteed
  * to be legal for the filesystem in question.
  */
-export class Filepath extends DataLocation implements Value<string> {
+export class Filepath extends DataLocation {
     #pathApi: PathApi;
     #path: string;
     #parts: path.ParsedPath | undefined;
@@ -121,26 +120,9 @@ export class Filepath extends DataLocation implements Value<string> {
     // -----------------------------------------------------------------------
 
     /**
-     * type guard. Proves to the TS compiler what we are.
-     */
-    public isValue(): this is Value<string> {
-        return true;
-    }
-
-    /**
      * returns the resolved path
      */
     public valueOf(): string {
-        return this.#path;
-    }
-
-    /**
-     * auto-conversion support
-     */
-    public [Symbol.toPrimitive](hint: string): string|null {
-        if (hint === "number") {
-            return null;
-        }
         return this.#path;
     }
 

@@ -34,3 +34,4 @@
 
 export { ERROR_TABLE } from "./PackageErrorTable";
 export { NotAFilepathError } from "./NotAFilepath";
+export { NotAURLError } from "./NotAURL";
