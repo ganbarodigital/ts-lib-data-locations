@@ -36,6 +36,19 @@ import { describe } from "mocha";
 
 import { DataLocation } from ".";
 
+// protocol & extension needed to test addExtension()
+interface AddDummyFeature {
+    getDummyValue(): string;
+}
+// tslint:disable-next-line: max-classes-per-file
+abstract class DataLocationAddDummyFeature extends DataLocation implements AddDummyFeature {
+    public getDummyValue() {
+        return "dummy value";
+    }
+}
+const AddDummyFeatureProtocolDef = [ "getDummyValue" ];
+
+// tslint:disable-next-line: max-classes-per-file
 class UnitTestClass extends DataLocation
 {
     public constructor(base: DataLocation|string|null, location: DataLocation|string) {
@@ -95,4 +108,36 @@ describe("DataLocation", () => {
         }
     });
 
+    describe(".addExtension()", () => {
+        it("adds extra features to the DataLocation type", () => {
+            const expectedValue = "dummy value";
+
+            const unit = new UnitTestClass(null, "/tmp/example")
+                         .addExtension(DataLocationAddDummyFeature.prototype);
+
+            const actualValue = unit.getDummyValue();
+            expect(actualValue).to.equal(expectedValue);
+        });
+    });
+
+    describe(".implementsProtocol()", () => {
+        it("returns `true` if the protocol is supported", () => {
+            const expectedValue = true;
+
+            const unit = new UnitTestClass(null, "/tmp/example")
+                         .addExtension(DataLocationAddDummyFeature.prototype);
+
+            const actualValue = unit.implementsProtocol(AddDummyFeatureProtocolDef);
+            expect(actualValue).to.equal(expectedValue);
+        });
+
+        it("returns `false` otherwise", () => {
+            const expectedValue = false;
+
+            const unit = new UnitTestClass(null, "/tmp/example");
+
+            const actualValue = unit.implementsProtocol(AddDummyFeatureProtocolDef);
+            expect(actualValue).to.equal(expectedValue);
+        });
+    });
 });

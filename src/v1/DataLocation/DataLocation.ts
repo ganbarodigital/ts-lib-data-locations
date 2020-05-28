@@ -32,7 +32,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 
-import { addExtension } from "@ganbarodigital/ts-lib-augmentations/lib/v1";
+import { addExtension, implementsProtocol, ProtocolDefinition } from "@ganbarodigital/ts-lib-augmentations/lib/v1";
 
 export interface DataLocationConstructor {
     // tslint:disable-next-line: callable-types
@@ -128,6 +128,18 @@ export abstract class DataLocation {
      */
     public addExtension<S>(source: S, seed?: S): this & S {
         return addExtension(this, source, seed);
+    }
+
+    /**
+     * type guard. Returns `true` if:
+     *
+     * - this DataLocation implements the required methods, or
+     * - someone has added a suitable extension to this DataLocation
+     *
+     * that satisfy the given protocol definition.
+     */
+    public implementsProtocol<T>(protocol: ProtocolDefinition): this is T {
+        return implementsProtocol<T>(this, protocol);
     }
 
     public abstract valueOf(): string;
