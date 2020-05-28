@@ -36,7 +36,7 @@ import path from "path";
 import url from "url";
 
 import { DataLocation } from "../DataLocation";
-import { NotAURLError } from "../Errors/NotAURL";
+import { NotAURLError } from "../Errors";
 import { ParsedURL } from "../ParsedURL";
 import { URLFormatOptions } from "../URLFormatOptions";
 import { buildURLHref } from "./buildURLHref";

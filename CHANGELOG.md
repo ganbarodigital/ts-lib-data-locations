@@ -31,6 +31,7 @@ The following changes have been completed, and will be included in the next tagg
 - DataLocation now implements `Value<string>`
   - previously, this was done by `Filepath` et al
   - improves support for Liskov substitution
+- export `NotAURLError` error class
 
 ## v0.1.3
 
