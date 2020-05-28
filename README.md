@@ -82,6 +82,12 @@ That's a long-winded way of saying that it's normally very helpful to keep track
 ### DataLocation class
 
 ```typescript
+// how to import into your own code
+import { DataLocation } from "@ganbarodigital/ts-lib-data-locations/lib/v1";
+
+// base classes & interfaces used by DataLocation
+import { Value } from "@ganbarodigital/ts-lib-value-objects/lib/v2";
+
 // parameter and return types used by DataLocation
 import { ProtocolDefinition } from "@ganbarodigital/ts-lib-augmentations/lib/v1";
 
@@ -93,7 +99,7 @@ import { ProtocolDefinition } from "@ganbarodigital/ts-lib-augmentations/lib/v1"
  * - a file on a filesystem (a Filepath)
  * - a URL (a URL)
  */
-export class DataLocation {
+export class DataLocation implements Value<string> {
     /**
      * our `base` - where we are.
      *
@@ -131,6 +137,27 @@ export class DataLocation {
      * that satisfy the given protocol definition.
      */
     public implementsProtocol<T>(protocol: ProtocolDefinition): this is T;
+
+    // =======================================================================
+    //
+    // VALUE functions
+    //
+    // -----------------------------------------------------------------------
+
+    /**
+     * type guard. Proves to the TS compiler what we are.
+     */
+    public isValue(): this is Value<string>;
+
+    /**
+     * returns the resolved DataLocation
+     */
+    public abstract valueOf(): string;
+
+    /**
+     * auto-conversion support
+     */
+    public [Symbol.toPrimitive](hint: string): string|null;
 }
 ```
 
@@ -233,7 +260,7 @@ import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting
  * The thing it points at does not have to exist, and isn't guaranteed
  * to be legal for the filesystem in question.
  */
-export class Filepath extends DataLocation implements Value<string> {
+export class Filepath extends DataLocation {
     #pathApi: PathApi;
     #path: string;
     #parts: path.ParsedPath | undefined;
@@ -444,7 +471,6 @@ import { URL } from "@ganbarodigital/ts-lib-data-locations/lib/v1";
 // the types we use for parameters
 import { ParsedURL } from "@ganbarodigital/ts-lib-data-locations/lib/v1";
 import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
-import { Value } from "@ganbarodigital/ts-lib-value-objects/lib/v2";
 import url from "url";
 
 /**
@@ -461,7 +487,7 @@ import url from "url";
  * - any setters (this is an immutable value), and
  * - support for usernames / passwords in URLs (deprecated by RFC 3986)
  */
-export class URL extends DataLocation implements Value<string> {
+export class URL extends DataLocation {
     /**
      * static constructor. Assembles a URL from an optional baseUrl,
      * and a set of parts.

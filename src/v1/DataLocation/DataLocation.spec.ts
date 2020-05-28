@@ -140,4 +140,11 @@ describe("DataLocation", () => {
             expect(actualValue).to.equal(expectedValue);
         });
     });
+
+    describe(".isValue()", () => {
+        it("returns `true`", () => {
+            const unit = new UnitTestClass(null, ".");
+            expect(unit.isValue()).to.equal(true);
+        });
+    })
 });

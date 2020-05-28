@@ -33,6 +33,7 @@
 //
 
 import { addExtension, implementsProtocol, ProtocolDefinition } from "@ganbarodigital/ts-lib-augmentations/lib/v1";
+import { Value } from "@ganbarodigital/ts-lib-value-objects/lib/v2";
 
 export interface DataLocationConstructor {
     // tslint:disable-next-line: callable-types
@@ -47,7 +48,7 @@ export interface DataLocationConstructor {
  * - a file on a filesystem (a Filepath)
  * - a URL (a URL)
  */
-export abstract class DataLocation {
+export abstract class DataLocation implements Value<string> {
     /**
      * our `base` - where we are.
      *
@@ -142,5 +143,31 @@ export abstract class DataLocation {
         return implementsProtocol<T>(this, protocol);
     }
 
+    // =======================================================================
+    //
+    // VALUE functions
+    //
+    // -----------------------------------------------------------------------
+
+    /**
+     * type guard. Proves to the TS compiler what we are.
+     */
+    public isValue(): this is Value<string> {
+        return true;
+    }
+
+    /**
+     * returns the resolved DataLocation
+     */
     public abstract valueOf(): string;
+
+    /**
+     * auto-conversion support
+     */
+    public [Symbol.toPrimitive](hint: string): string|null {
+        if (hint === "number") {
+            return null;
+        }
+        return this.valueOf();
+    }
 }

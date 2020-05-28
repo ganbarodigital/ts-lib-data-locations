@@ -32,7 +32,6 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 import { OnError, THROW_THE_ERROR } from "@ganbarodigital/ts-lib-error-reporting/lib/v1";
-import { Value } from "@ganbarodigital/ts-lib-value-objects/lib/v2";
 import path from "path";
 import url from "url";
 
@@ -70,7 +69,7 @@ interface URLOptionalPropMap {
  * - any setters (this is an immutable value), and
  * - support for usernames / passwords in URLs (deprecated by RFC 3986)
  */
-export class URL extends DataLocation implements Value<string> {
+export class URL extends DataLocation {
     #nodeUrl: url.URL;
     #value: string;
 
@@ -140,26 +139,9 @@ export class URL extends DataLocation implements Value<string> {
     // -----------------------------------------------------------------------
 
     /**
-     * type guard. Proves to the TS compiler what we are.
-     */
-    public isValue(): this is Value<string> {
-        return true;
-    }
-
-    /**
      * returns the resolved path
      */
     public valueOf(): string {
-        return this.#value;
-    }
-
-    /**
-     * auto-conversion support
-     */
-    public [Symbol.toPrimitive](hint: string): string|null {
-        if (hint === "number") {
-            return null;
-        }
         return this.#value;
     }
 

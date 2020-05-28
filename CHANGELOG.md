@@ -26,6 +26,12 @@ The following changes have been completed, and will be included in the next tagg
 - Bumped to `ts-lib-value-objects` v2.x
 - Bumped to TypeScript v3.9
 
+### Fixes
+
+- DataLocation now implements `Value<string>`
+  - previously, this was done by `Filepath` et al
+  - improves support for Liskov substitution
+
 ## v0.1.3
 
 Released Thursday, 28th May 2020.
