@@ -82,6 +82,9 @@ That's a long-winded way of saying that it's normally very helpful to keep track
 ### DataLocation class
 
 ```typescript
+// parameter and return types used by DataLocation
+import { ProtocolDefinition } from "@ganbarodigital/ts-lib-augmentations/lib/v1";
+
 /**
  * value type.
  *
@@ -118,6 +121,16 @@ export class DataLocation {
      * See @ganbarodigital/ts-lib-augmentations for details
      */
     public addExtension<S>(source: S, seed?: S): this & S;
+
+    /**
+     * type guard. Returns `true` if:
+     *
+     * - this DataLocation implements the required methods, or
+     * - someone has added a suitable extension to this DataLocation
+     *
+     * that satisfy the given protocol definition.
+     */
+    public implementsProtocol<T>(protocol: ProtocolDefinition): this is T;
 }
 ```
 
