@@ -21,6 +21,11 @@ For each release, changes are grouped under these headings:
 
 The following changes have been completed, and will be included in the next tagged release.
 
+### Dependencies
+
+- Bumped to `ts-lib-value-objects` v2.x
+- Bumped to TypeScript v3.9
+
 ## v0.1.3
 
 Released Thursday, 28th May 2020.
